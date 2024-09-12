@@ -49,7 +49,5 @@ extern void graphics_vga_set_cursor(uint8_t x, uint8_t y);
 extern void graphics_vga_putc(char c);
 /* Write a string to the screen */
 extern void graphics_vga_puts(char *str);
-/* Change vga graphics mode */
-extern void graphics_vga_set_mode(uint8_t mode);
 
 #endif /* GRAPHICS_VGA_H */
