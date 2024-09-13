@@ -40,7 +40,6 @@ void graphics_vga_set_color(enum vga_color fg, enum vga_color bg) {
 
 /* Sets cursor position */
 void graphics_vga_set_cursor(uint8_t x, uint8_t y) {
-  KERNEL_ASSERT(x < VGA_WIDTH && y < VGA_HEIGHT);
   _vga_cursor = _vga_mem + (y * VGA_WIDTH) + x;
 }
 

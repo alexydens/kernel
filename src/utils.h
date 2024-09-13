@@ -1,6 +1,4 @@
-/*
-'i cry myself to sleep and don't know what to do' - classmate's french mock
-*/
+/* Include guard */
 #if !defined(UTILS_H)
 #define UTILS_H
 
@@ -8,14 +6,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-
-/*
-Kernel panic - BSOD type thing and the OS will brick up. Hope i can recover
-from a reboot...
-*/
-extern void kernel_panic(void);
-/* Assertions that kernel panic on fail */
-#define KERNEL_ASSERT(expr) do { if (!(expr)) { kernel_panic(); } } while (0)
 
 /* The end of the kernel - address of var is important, not value */
 extern int end_kernel;
