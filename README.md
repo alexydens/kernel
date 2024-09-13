@@ -3,9 +3,11 @@
 THIS IS A WORK IN PROGRESS
 
 ## To implement
-- [ ] `boot.S` file, adhering to multiboot standard, to leave space for stack
+- [x] `boot.S` file, adhering to multiboot standard, to leave space for stack
 and call `kernel_main`.
-- [ ] Simple VGA driver.
+- [x] Simple VGA driver.
+- [x] Ported I/O driver.
+- [ ] Simple keyboard driver (PS2).
 - [ ] Interrupt handler (IDT, IRQs).
 - [ ] Create fresh GDT.
 - [ ] Page allocation system (allowing for permission changing, etc).

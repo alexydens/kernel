@@ -13,11 +13,17 @@
 
 /* Project includes */
 #include "graphics_vga.h"
+#include "gdt.h"
+#include "idt.h"
 
 /* Entry point */
 void kernel_main(void) {
   graphics_vga_set_color(VGA_COLOR_WHITE, VGA_COLOR_DARK_GREY);
   graphics_vga_clear(0);
   graphics_vga_set_cursor(0, 0);
-  graphics_vga_puts("Hello, World!\r\n");
+  graphics_vga_puts("Startup: Initializing GDT...\r\n");
+  gdt_init();
+  graphics_vga_puts("Startup: Initializing IDT...\r\n");
+  idt_init();
+  BREAKPOINT();
 }

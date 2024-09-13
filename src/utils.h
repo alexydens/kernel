@@ -9,7 +9,10 @@
 
 /* The end of the kernel - address of var is important, not value */
 extern int end_kernel;
-#define KERNEL_END ((void*)(&end_kernel))
+#define KERNEL_END      ((void*)(&end_kernel))
+
+/* Set a breakpoint that will cause an interrupt on execution */
+#define BREAKPOINT()    do {__asm__ __volatile__ ("int $3");} while(0)
 
 /* Blindly copies memory from src to dest of size bytes */
 static inline void memcpy(void *dest, void *src, size_t size) {
