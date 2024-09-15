@@ -3,7 +3,7 @@
 
 /* Globals */
 struct gdtr gdtr;
-struct gdt_entry gdt[3];
+struct gdt_entry gdt[5];
 
 static inline struct gdt_entry create_gdtentry(
     uint32_t base,
@@ -44,6 +44,28 @@ void gdt_init(void) {
       0xFFFFFF,
       GDT_ACCESS_PRESENT
         | GDT_ACCESS_RING0
+        | GDT_ACCESS_NOTTSS
+        | GDT_ACCESS_READWRITE
+        | GDT_ACCESS_ACCESSED,
+      GDT_FLAGS_PAGEADDR | GDT_FLAGS_32BIT
+  );
+  gdt[3] = create_gdtentry(
+      0,
+      0xFFFFFF,
+      GDT_ACCESS_PRESENT
+        | GDT_ACCESS_RING3
+        | GDT_ACCESS_NOTTSS
+        | GDT_ACCESS_EXECUTABLE
+        | GDT_ACCESS_DIR_CONF
+        | GDT_ACCESS_READWRITE
+        | GDT_ACCESS_ACCESSED,
+      GDT_FLAGS_PAGEADDR | GDT_FLAGS_32BIT
+  );
+  gdt[4] = create_gdtentry(
+      0,
+      0xFFFFFF,
+      GDT_ACCESS_PRESENT
+        | GDT_ACCESS_RING3
         | GDT_ACCESS_NOTTSS
         | GDT_ACCESS_READWRITE
         | GDT_ACCESS_ACCESSED,
