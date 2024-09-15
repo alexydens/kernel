@@ -2,8 +2,8 @@
 #include "graphics_vga.h"
 
 /* Global state */
-static uint16_t *_vga_mem = (uint16_t *)0xb8000;
-static uint16_t *_vga_cursor = (uint16_t *)0xb8000;
+volatile static uint16_t *_vga_mem = (uint16_t *)0xb8000;
+volatile static uint16_t *_vga_cursor = (uint16_t *)0xb8000;
 static uint8_t _vga_color = 15;                /* 15 | 0<<4 (white on black) */
 
 /* Gets a color from a foreground and background */
@@ -27,7 +27,7 @@ static inline void _update_cursor(void) {
 /* Clears the screen */
 void graphics_vga_clear(char c) {
   char char_used = c == 0 ? ' ' : c;
-  uint16_t *vga_cursor = _vga_cursor;
+  volatile uint16_t *vga_cursor = _vga_cursor;
   for (size_t i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++) {
     *vga_cursor++ = _get_char(char_used, _vga_color);
   }
@@ -47,12 +47,12 @@ void graphics_vga_set_cursor(uint8_t x, uint8_t y) {
 static inline void _putc(char c) {
   if (_vga_cursor >= _vga_mem + VGA_WIDTH * VGA_HEIGHT) {
     memcpy(
-        _vga_mem,
-        _vga_mem + VGA_WIDTH,
+        (void*)_vga_mem,
+        (void*)_vga_mem + VGA_WIDTH,
         ((VGA_WIDTH * VGA_HEIGHT) - VGA_WIDTH) * 2
     );
     for (
-        uint16_t *i = _vga_mem + (VGA_WIDTH * VGA_HEIGHT) - VGA_WIDTH;
+        volatile uint16_t *i = _vga_mem + (VGA_WIDTH * VGA_HEIGHT) - VGA_WIDTH;
         i < _vga_mem + (VGA_WIDTH * VGA_HEIGHT);
         i++
     ) {
