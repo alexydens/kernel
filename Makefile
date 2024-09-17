@@ -29,7 +29,7 @@ CFLAGS = -std=c11 -ffreestanding -Wall -Wextra -Wpedantic
 # C++ Compiler flags
 CXXFLAGS = -std=c++17 -ffreestanding -Wall -Wextra -Wpedantic -fno-exceptions -fno-rtti
 # Linker flags
-LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -O2 -lgcc
+LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -lgcc
 
 # Sources in C
 C_SOURCES = $(wildcard $(SRC_DIR)/*.c)
