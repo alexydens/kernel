@@ -1,8 +1,11 @@
-#include <stdint.h>
+/* Includes */
+#include "vga_text_term.h"
 
+/* Kernel entry point */
 void kernel_main(void) {
-  volatile uint16_t *vga_buffer = (uint16_t *)0xc03ff000;
-  vga_buffer[0] = 0xf041;
-  vga_buffer[1] = 0xf042;
+  _vga_text_set_color(_VGA_TEXT_COLOR_WHITE, _VGA_TEXT_COLOR_DARK_GREY);
+  _vga_text_set_cursor(0, 0);
+  _vga_text_clear(0);
+  _vga_text_puts("Hello, World!\r\n");
   while (1) {}
 }
