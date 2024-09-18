@@ -17,6 +17,7 @@ and call `kernel_main`.
 - Support for user-space programs.
 - Allow kernel-space drivers to be added.
 - Users and shell.
+\
 NOTE: I have removed the tick marks on these points as I do not intend to
 strictly follow them, in light of some refactoring and moving my kernel to the
 higher half of the virtual address space.
