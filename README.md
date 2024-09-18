@@ -3,17 +3,20 @@
 THIS IS A WORK IN PROGRESS
 
 ## To implement
-- [x] `boot.S` file, adhering to multiboot standard, to leave space for stack
+- `boot.S` file, adhering to multiboot standard, to leave space for stack
 and call `kernel_main`.
-- [x] Simple VGA driver.
-- [x] Ported I/O driver.
-- [ ] Simple keyboard driver (PS2).
-- [ ] Interrupt handler (IDT, IRQs).
-- [ ] Create fresh GDT.
-- [ ] Page allocation system (allowing for permission changing, etc).
-- [ ] Task scheduling.
-- [ ] Support for file system - fat32, ext4?
-- [ ] Support for executable file types.
-- [ ] Support for user-space programs.
-- [ ] Allow kernel-space drivers to be added.
-- [ ] Users and shell.
+- Simple VGA driver.
+- Ported I/O driver.
+- Simple keyboard driver (PS2).
+- Interrupt handler (IDT, IRQs).
+- Create fresh GDT.
+- Page allocation system (allowing for permission changing, etc).
+- Task scheduling.
+- Support for file system - fat32, ext4?
+- Support for executable file types.
+- Support for user-space programs.
+- Allow kernel-space drivers to be added.
+- Users and shell.
+NOTE: I have removed the tick marks on these points as I do not intend to
+strictly follow them, in light of some refactoring and moving my kernel to the
+higher half of the virtual address space.
