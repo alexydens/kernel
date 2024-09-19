@@ -34,18 +34,18 @@ LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -lgcc
 # Sources in C
 C_SOURCES = $(wildcard $(SRC_DIR)/*.c)
 # Sources in asm
-ASM_SOURCES = $(wildcard $(SRC_DIR)/*.s)
+ASM_SOURCES = $(wildcard $(SRC_DIR)/*.S)
 
 # Object files
 OBJECTS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SOURCES))
-OBJECTS += $(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(ASM_SOURCES))
+OBJECTS += $(patsubst $(SRC_DIR)/%.S,$(OBJ_DIR)/%.o,$(ASM_SOURCES))
 
 # Compile C code
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Compile assembly code
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.S
 	$(AS) -o $@ $<
 
 # Link into main binary

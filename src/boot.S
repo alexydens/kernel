@@ -30,11 +30,13 @@ _stack_top:
 
 /* Reserve space for the page directory and the first page table */
 .section .bss, "aw", @nobits
-  .align 4096
+.global _init_PD
+.global _init_PT0
+.align 4096
 _init_PD:
-  .skip 4096
+.skip 4096
 _init_PT0:
-  .skip 4096
+.skip 4096
 
 /*
 The entry point is _start. This is linked in from the bootloader
