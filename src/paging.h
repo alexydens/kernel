@@ -9,23 +9,27 @@
 
 /* Consts */
 /* Page directory entry flags */
-#define _PDE_FLAGS_PRESENT   (1 << 0)
-#define _PDE_FLAGS_RW        (1 << 1)
-#define _PDE_FLAGS_USER      (1 << 2)
-#define _PDE_FLAGS_PWT       (1 << 3)
-#define _PDE_FLAGS_PCD       (1 << 4)
-#define _PDE_FLAGS_ACCESSED  (1 << 5)
-#define _PDE_FLAGS_DIRTY     (1 << 6)
-#define _PDE_FLAGS_SIZE      (1 << 7)
+#define _PDE_FLAGS_PRESENT       (1 << 0)
+#define _PDE_FLAGS_RW            (1 << 1)
+#define _PDE_FLAGS_USER          (1 << 2)
+#define _PDE_FLAGS_PWT           (1 << 3)
+#define _PDE_FLAGS_PCD           (1 << 4)
+#define _PDE_FLAGS_ACCESSED      (1 << 5)
+#define _PDE_FLAGS_DIRTY         (1 << 6)
+#define _PDE_FLAGS_SIZE          (1 << 7)
 /* Page table entry flags */
-#define _PTE_FLAGS_PRESENT   (1 << 0)
-#define _PTE_FLAGS_RW        (1 << 1)
-#define _PTE_FLAGS_USER      (1 << 2)
-#define _PTE_FLAGS_PWT       (1 << 3)
-#define _PTE_FLAGS_PCD       (1 << 4)
-#define _PTE_FLAGS_ACCESSED  (1 << 5)
-#define _PTE_FLAGS_DIRTY     (1 << 6)
-#define _PTE_FLAGS_SIZE      (1 << 7)
+#define _PTE_FLAGS_PRESENT       (1 << 0)
+#define _PTE_FLAGS_RW            (1 << 1)
+#define _PTE_FLAGS_USER          (1 << 2)
+#define _PTE_FLAGS_PWT           (1 << 3)
+#define _PTE_FLAGS_PCD           (1 << 4)
+#define _PTE_FLAGS_ACCESSED      (1 << 5)
+#define _PTE_FLAGS_DIRTY         (1 << 6)
+#define _PTE_FLAGS_SIZE          (1 << 7)
+
+/* Macros */
+/* Get a flag's status from a PD or PT entry (pass in flag and ptr to entry */
+#defie _PAGING_CHECK_FLAG(f, p) (((*p) & f) == 0 ? 0 : 1)
 
 /* Page directory entry */
 typedef struct {
