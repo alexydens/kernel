@@ -2,16 +2,16 @@
 #include "gdt.h"
 
 /* The global descriptor table */
-static gdt_entry_t _gdt[5];
+static _gdt_entry_t _gdt[5];
 /* The GDT descriptor */
-static gdtr_t _gdtr;
+static _gdtr_t _gdtr;
 
 /* Initialize the gdt */
-void gdt_init(void) {
+void _gdt_init(void) {
   /* Null entry */
-  _gdt[0] = gdt_entry(0, 0, 0, 0);
+  _gdt[0] = _gdt_entry(0, 0, 0, 0);
   /* Code segment - kernel */
-  _gdt[1] = gdt_entry(
+  _gdt[1] = _gdt_entry(
       0, 0xffffffff,
       _GDT_ACCESS_PRESENT
       | _GDT_ACCESS_DPL0
@@ -24,7 +24,7 @@ void gdt_init(void) {
       | _GDT_FLAGS_32BIT
   );
   /* Data segment - kernel */
-  _gdt[2] = gdt_entry(
+  _gdt[2] = _gdt_entry(
       0, 0xffffffff,
       _GDT_ACCESS_PRESENT
       | _GDT_ACCESS_DPL0
@@ -35,7 +35,7 @@ void gdt_init(void) {
       | _GDT_FLAGS_32BIT
   );
   /* Code segment - user */
-  _gdt[3] = gdt_entry(
+  _gdt[3] = _gdt_entry(
       0, 0xffffffff,
       _GDT_ACCESS_PRESENT
       | _GDT_ACCESS_DPL3
@@ -48,7 +48,7 @@ void gdt_init(void) {
       | _GDT_FLAGS_32BIT
   );
   /* Data segment - user */
-  _gdt[4] = gdt_entry(
+  _gdt[4] = _gdt_entry(
       0, 0xffffffff,
       _GDT_ACCESS_PRESENT
       | _GDT_ACCESS_DPL3
@@ -60,7 +60,7 @@ void gdt_init(void) {
   );
   /* Load the global descriptor table */
   _gdtr.base = (uint32_t)&_gdt;
-  _gdtr.limit = sizeof(gdt_entry_t) * 5 - 1;
+  _gdtr.limit = sizeof(_gdt_entry_t) * 5 - 1;
 
   /* Load GDT */
   __asm__ __volatile__ ("lgdt %0" : : "m" (_gdtr));

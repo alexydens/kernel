@@ -40,7 +40,7 @@
 typedef struct {
   uint16_t limit;
   uint32_t base;
-} __attribute__((packed)) gdtr_t;
+} __attribute__((packed)) _gdtr_t;
 
 /* GDT Entry */
 typedef struct {
@@ -51,15 +51,15 @@ typedef struct {
   uint8_t   limit_middle: 4;
   uint8_t   flags:        4;
   uint8_t   base_high;
-} __attribute__((packed)) gdt_entry_t;
+} __attribute__((packed)) _gdt_entry_t;
 
 /* Create a gdt entry */
-static inline gdt_entry_t gdt_entry(
+static inline _gdt_entry_t _gdt_entry(
     uint32_t base,
     uint32_t limit,
     uint8_t access,
     uint8_t flags) {
-  gdt_entry_t entry;
+  _gdt_entry_t entry;
   entry.limit_low = limit & 0xffff;
   entry.base_low = base & 0xffff;
   entry.base_middle = (base >> 16) & 0xff;
@@ -71,6 +71,6 @@ static inline gdt_entry_t gdt_entry(
 }
 
 /* Initialize the gdt */
-extern void gdt_init(void);
+extern void _gdt_init(void);
 
 #endif /* _GDT_H */

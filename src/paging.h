@@ -31,27 +31,27 @@
 typedef struct {
   uint32_t base:  20;
   uint32_t flags: 12;
-} __attribute__((packed)) pde_entry_t;
+} __attribute__((packed)) _pde_entry_t;
 
 /* Page table entry */
 typedef struct {
   uint32_t base:  20;
   uint32_t flags: 12;
-} __attribute__((packed)) pte_entry_t;
+} __attribute__((packed)) _pte_entry_t;
 
 /* Flush a page that has recently been remapped */
-extern void flush_page(uint32_t address);
+extern void _flush_page(uint32_t address);
 
 /* Create a page directory entry */
-static inline pde_entry_t pde_entry(uint32_t base, uint32_t flags) {
-  pde_entry_t entry;
+static inline _pde_entry_t _pde_entry(uint32_t base, uint32_t flags) {
+  _pde_entry_t entry;
   entry.base = base;
   entry.flags = flags;
   return entry;
 }
 /* Create a page table entry */
-static inline pte_entry_t pte_entry(uint32_t base, uint32_t flags) {
-  pte_entry_t entry;
+static inline _pte_entry_t _pte_entry(uint32_t base, uint32_t flags) {
+  _pte_entry_t entry;
   entry.base = base;
   entry.flags = flags;
   return entry;

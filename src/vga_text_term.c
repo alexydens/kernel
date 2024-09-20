@@ -17,17 +17,17 @@ static inline uint8_t _get_color(uint8_t fg, uint8_t bg) {
 }
 /* Update the cursor position */
 static inline void _update_cursor(void) {
-  portbout(_VGA_TEXT_REG_CTRL, 14);
-  portbout(_VGA_TEXT_REG_DATA, 
+  _portbout(_VGA_TEXT_REG_CTRL, 14);
+  _portbout(_VGA_TEXT_REG_DATA, 
       (uint8_t)((_vga_text_cursor - _vga_text_mem) >> 8));
-  portbout(_VGA_TEXT_REG_CTRL, 15);
-  portbout(_VGA_TEXT_REG_DATA, 
+  _portbout(_VGA_TEXT_REG_CTRL, 15);
+  _portbout(_VGA_TEXT_REG_DATA, 
       (uint8_t)(_vga_text_cursor - _vga_text_mem));
 }
 /* Put one character to the screen */
 static inline void _putc(char c) {
   if (_vga_text_cursor >= _vga_text_mem + _VGA_TEXT_TERM_SIZE) {
-    memcpy(
+    _memcpy(
         _vga_text_mem,
         _vga_text_mem + _VGA_TEXT_TERM_COLS,
         (_VGA_TEXT_TERM_SIZE - _VGA_TEXT_TERM_COLS) * 2
