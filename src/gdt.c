@@ -2,65 +2,65 @@
 #include "gdt.h"
 
 /* The global descriptor table */
-static _gdt_entry_t _gdt[5];
+static gdt_entry_t _gdt[5];
 /* The GDT descriptor */
-static _gdtr_t _gdtr;
+static gdtr_t _gdtr;
 
 /* Initialize the gdt */
-void _gdt_init(void) {
+void gdt_init(void) {
   /* Null entry */
-  _gdt[0] = _gdt_entry(0, 0, 0, 0);
+  _gdt[0] = gdt_entry(0, 0, 0, 0);
   /* Code segment - kernel */
-  _gdt[1] = _gdt_entry(
+  _gdt[1] = gdt_entry(
       0, 0xffffffff,
-      _GDT_ACCESS_PRESENT
-      | _GDT_ACCESS_DPL0
-      | _GDT_ACCESS_NOTSYS
-      | _GDT_ACCESS_EXEC
-      | _GDT_ACCESS_CONFORMS
-      | _GDT_ACCESS_READABLE
-      | _GDT_ACCESS_ACCESSED,
-      _GDT_FLAGS_GRANULARITY
-      | _GDT_FLAGS_32BIT
+      GDT_ACCESS_PRESENT
+      | GDT_ACCESS_DPL0
+      | GDT_ACCESS_NOTSYS
+      | GDT_ACCESS_EXEC
+      | GDT_ACCESS_CONFORMS
+      | GDT_ACCESS_READABLE
+      | GDT_ACCESS_ACCESSED,
+      GDT_FLAGS_GRANULARITY
+      | GDT_FLAGS_32BIT
   );
   /* Data segment - kernel */
-  _gdt[2] = _gdt_entry(
+  _gdt[2] = gdt_entry(
       0, 0xffffffff,
-      _GDT_ACCESS_PRESENT
-      | _GDT_ACCESS_DPL0
-      | _GDT_ACCESS_NOTSYS
-      | _GDT_ACCESS_WRITABLE
-      | _GDT_ACCESS_ACCESSED,
-      _GDT_FLAGS_GRANULARITY
-      | _GDT_FLAGS_32BIT
+      GDT_ACCESS_PRESENT
+      | GDT_ACCESS_DPL0
+      | GDT_ACCESS_NOTSYS
+      | GDT_ACCESS_WRITABLE
+      | GDT_ACCESS_ACCESSED,
+      GDT_FLAGS_GRANULARITY
+      | GDT_FLAGS_32BIT
   );
   /* Code segment - user */
-  _gdt[3] = _gdt_entry(
+  _gdt[3] = gdt_entry(
       0, 0xffffffff,
-      _GDT_ACCESS_PRESENT
-      | _GDT_ACCESS_DPL3
-      | _GDT_ACCESS_NOTSYS
-      | _GDT_ACCESS_EXEC
-      | _GDT_ACCESS_CONFORMS
-      | _GDT_ACCESS_READABLE
-      | _GDT_ACCESS_ACCESSED,
-      _GDT_FLAGS_GRANULARITY
-      | _GDT_FLAGS_32BIT
+      GDT_ACCESS_PRESENT
+      | GDT_ACCESS_DPL3
+      | GDT_ACCESS_NOTSYS
+      | GDT_ACCESS_EXEC
+      | GDT_ACCESS_CONFORMS
+      | GDT_ACCESS_READABLE
+      | GDT_ACCESS_ACCESSED,
+      GDT_FLAGS_GRANULARITY
+      | GDT_FLAGS_32BIT
   );
   /* Data segment - user */
-  _gdt[4] = _gdt_entry(
+  _gdt[4] = gdt_entry(
       0, 0xffffffff,
-      _GDT_ACCESS_PRESENT
-      | _GDT_ACCESS_DPL3
-      | _GDT_ACCESS_NOTSYS
-      | _GDT_ACCESS_WRITABLE
-      | _GDT_ACCESS_ACCESSED,
-      _GDT_FLAGS_GRANULARITY
-      | _GDT_FLAGS_32BIT
+      GDT_ACCESS_PRESENT
+      | GDT_ACCESS_DPL3
+      | GDT_ACCESS_NOTSYS
+      | GDT_ACCESS_WRITABLE
+      | GDT_ACCESS_ACCESSED,
+      GDT_FLAGS_GRANULARITY
+      | GDT_FLAGS_32BIT
   );
   /* Load the global descriptor table */
-  _gdtr.base = (uint32_t)&_gdt;
-  _gdtr.limit = sizeof(_gdt_entry_t) * 5 - 1;
+  _gdtr.base = (uint32_t)((uint8_t*)&_gdt);
+  _gdtr.limit = sizeof(gdt_entry_t) * 5 - 1;
 
   /* Load GDT */
   __asm__ __volatile__ ("lgdt %0" : : "m" (_gdtr));

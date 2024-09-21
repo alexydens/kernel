@@ -17,24 +17,24 @@ static inline uint8_t _get_color(uint8_t fg, uint8_t bg) {
 }
 /* Update the cursor position */
 static inline void _update_cursor(void) {
-  _portbout(_VGA_TEXT_REG_CTRL, 14);
-  _portbout(_VGA_TEXT_REG_DATA, 
+  port_outb(VGA_TEXT_REG_CTRL, 14);
+  port_outb(VGA_TEXT_REG_DATA, 
       (uint8_t)((_vga_text_cursor - _vga_text_mem) >> 8));
-  _portbout(_VGA_TEXT_REG_CTRL, 15);
-  _portbout(_VGA_TEXT_REG_DATA, 
+  port_outb(VGA_TEXT_REG_CTRL, 15);
+  port_outb(VGA_TEXT_REG_DATA, 
       (uint8_t)(_vga_text_cursor - _vga_text_mem));
 }
 /* Put one character to the screen */
 static inline void _putc(char c) {
-  if (_vga_text_cursor >= _vga_text_mem + _VGA_TEXT_TERM_SIZE) {
-    _memcpy(
+  if (_vga_text_cursor >= _vga_text_mem + VGA_TEXT_TERM_SIZE) {
+    memcpy(
         _vga_text_mem,
-        _vga_text_mem + _VGA_TEXT_TERM_COLS,
-        (_VGA_TEXT_TERM_SIZE - _VGA_TEXT_TERM_COLS) * 2
+        _vga_text_mem + VGA_TEXT_TERM_COLS,
+        (VGA_TEXT_TERM_SIZE - VGA_TEXT_TERM_COLS) * 2
     );
     for (
-        uint16_t *i = _vga_text_mem + _VGA_TEXT_TERM_SIZE - _VGA_TEXT_TERM_COLS;
-        i < _vga_text_mem + _VGA_TEXT_TERM_SIZE;
+        uint16_t *i = _vga_text_mem + VGA_TEXT_TERM_SIZE - VGA_TEXT_TERM_COLS;
+        i < _vga_text_mem + VGA_TEXT_TERM_SIZE;
         i++
     ) {
       *i = _get_char(' ', _vga_color);
@@ -43,16 +43,16 @@ static inline void _putc(char c) {
   }
   switch (c) {
     case '\n':
-      _vga_text_cursor += _VGA_TEXT_TERM_COLS;
+      _vga_text_cursor += VGA_TEXT_TERM_COLS;
       break;
     case '\r':
       _vga_text_cursor -=
-        (int)(_vga_text_cursor - _vga_text_mem) % _VGA_TEXT_TERM_COLS;
+        (int)(_vga_text_cursor - _vga_text_mem) % VGA_TEXT_TERM_COLS;
       break;
     case '\t':
       _vga_text_cursor +=
-        _VGA_TEXT_TAB_WIDTH
-        - ((int)(_vga_text_cursor - _vga_text_mem) % _VGA_TEXT_TAB_WIDTH);
+        VGA_TEXT_TAB_WIDTH
+        - ((int)(_vga_text_cursor - _vga_text_mem) % VGA_TEXT_TAB_WIDTH);
       break;
     default:
       *(_vga_text_cursor++) = _get_char(c, _vga_color);
@@ -60,29 +60,29 @@ static inline void _putc(char c) {
 }
 
 /* Clear vga text buffer with character c */
-void _vga_text_clear(char c) {
+void vga_text_clear(char c) {
   char char_used = c == 0 ? ' ' : c;
   uint16_t *vga_text_cursor = _vga_text_cursor;
-  for (size_t i = 0; i < _VGA_TEXT_TERM_SIZE; i++) {
+  for (size_t i = 0; i < VGA_TEXT_TERM_SIZE; i++) {
     *vga_text_cursor++ = _get_char(char_used, _vga_color);
   }
 }
 /* Set color for vga text functions */
-void _vga_text_set_color(uint8_t fg, uint8_t bg) {
+void vga_text_set_color(uint8_t fg, uint8_t bg) {
   _vga_color = _get_color(fg, bg);
 }
 /* Set cursor position for vga text functions */
-void _vga_text_set_cursor(uint8_t x, uint8_t y) {
+void vga_text_set_cursor(uint8_t x, uint8_t y) {
   /* TODO: Validate with assertions */
-  _vga_text_cursor = _vga_text_mem + (y * _VGA_TEXT_TERM_COLS) + x;
+  _vga_text_cursor = _vga_text_mem + (y * VGA_TEXT_TERM_COLS) + x;
 }
 /* Write character to vga text buffer */
-void _vga_text_putc(char c) {
+void vga_text_putc(char c) {
   _putc(c);
   _update_cursor();
 }
 /* Write a string (null terminated) to the vga text buffer */
-void _vga_text_puts(char *str) {
+void vga_text_puts(char *str) {
   while (*str) {
     _putc(*str++);
   }
