@@ -1,6 +1,7 @@
 /* Includes */
-#include "gdt.h"
 #include "vga_text_term.h"
+#include "gdt.h"
+#include "idt.h"
 
 /* Kernel entry point */
 void kernel_main(void) {
@@ -12,7 +13,11 @@ void kernel_main(void) {
   vga_text_clear(0);
   vga_text_puts("===> Initialized Global Descriptor Table.\r\n");
   vga_text_puts("===> Initialized VGA Text Mode Terminal.\r\n");
+  /* Initialize IDT */
+  idt_init();
+  vga_text_puts("===> Initialized Interrupt Descriptor Table.\r\n");
   /* Test */
+  __asm__ __volatile__ ("int $0x3");
   vga_text_puts("Hello world!\r\n");
   /* Loop */
   while (1) {}
