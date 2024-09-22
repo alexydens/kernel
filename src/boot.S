@@ -100,7 +100,7 @@ _start:
   movl %ecx, %cr3
   /* Enable paging (and write protect) */
   movl %cr0, %ecx
-  orl $0x80000000, %ecx
+  orl $0x80010001, %ecx
   movl %ecx, %cr0
 
   /* Jump into the higher half, label 3 */
