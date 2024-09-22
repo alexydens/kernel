@@ -38,7 +38,6 @@ void paging_init(void) {
       PDE_FLAGS_PRESENT
       | PDE_FLAGS_RW
   );
-  reload_pd();
 
   /* Fill the cleared out area with non-present readwrite pages */
   /* There are 1022 spaces left in the PD */
