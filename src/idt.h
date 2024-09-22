@@ -8,6 +8,7 @@
 #include "gdt.h"
 
 /* Consts */
+/* IDT Entry flags */
 #define IDT_FLAGS_PRESENT     (1 << 7)
 #define IDT_FLAGS_RING0       (0 << 5)
 #define IDT_FLAGS_RING1       (1 << 5)
@@ -18,6 +19,14 @@
 #define IDT_FLAGS_TYPE_IG32   (0xE)
 #define IDT_FLAGS_TYPE_TG16   (0x7)
 #define IDT_FLAGS_TYPE_TG32   (0xF)
+/* PIC ports */
+#define PIC1_COMMAND_PORT     (0x20)
+#define PIC1_DATA_PORT        (0x21)
+#define PIC2_COMMAND_PORT     (0xA0)
+#define PIC2_DATA_PORT        (0xA1)
+/* PIC commmands */
+#define PIC_COMMAND_INIT      (0x11)
+#define PIC_COMMAND_ACK       (0x20)
 
 /* IDT Descriptor */
 typedef struct {
@@ -33,6 +42,15 @@ typedef struct {
 	uint8_t     flags;        /* flags */
 	uint16_t    isr_16_31;    /* The higher 16 bits of the ISR's address */
 } __attribute__((packed)) idt_entry_t;
+
+/* Arguments passed to IRQ handlers */
+typedef struct {
+  /* The irq num starts at 0 for irq0 */
+  /* The interrupt num starts at 32 for irq0 */
+  uint32_t interrupt_number, irq_number;
+  uint32_t eip, cs, eflags;
+  uint32_t esp, ss;
+} irq_args_t;
 
 /* Create IDT entry */
 static inline idt_entry_t idt_entry(
@@ -50,5 +68,7 @@ static inline idt_entry_t idt_entry(
 
 /* Initializes the IDT */
 extern void idt_init(void);
+/* Add IRQ handler */
+extern void add_irq_handler(uint8_t irq, void *handler);
 
 #endif /* _IDT_H */

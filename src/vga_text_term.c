@@ -39,7 +39,7 @@ static inline void _putc(char c) {
     ) {
       *i = _get_char(' ', _vga_color);
     }
-    *(_vga_text_cursor++) = _get_char(c, _vga_color);
+    _vga_text_cursor -= VGA_TEXT_TERM_COLS;
   }
   switch (c) {
     case '\n':
@@ -50,12 +50,11 @@ static inline void _putc(char c) {
         (int)(_vga_text_cursor - _vga_text_mem) % VGA_TEXT_TERM_COLS;
       break;
     case '\t':
-      _vga_text_cursor +=
-        VGA_TEXT_TAB_WIDTH
+      _vga_text_cursor += VGA_TEXT_TAB_WIDTH
         - ((int)(_vga_text_cursor - _vga_text_mem) % VGA_TEXT_TAB_WIDTH);
       break;
     default:
-      *(_vga_text_cursor++) = _get_char(c, _vga_color);
+      *_vga_text_cursor++ = _get_char(c, _vga_color);
   }
 }
 

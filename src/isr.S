@@ -2,7 +2,10 @@
 .globl isr_common
 .align 4
 isr_common:
+  pushl %esp
   call isr_handler_common
+  popl %eax
+  add $8, %esp
   iret
 .size isr_common, .-isr_common
 

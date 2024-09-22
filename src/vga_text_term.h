@@ -13,9 +13,9 @@
 #define VGA_TEXT_TERM_COLS             80
 #define VGA_TEXT_TERM_ROWS             25
 /* Size of terminal buffer in bytes */
-#define VGA_TEXT_TERM_BUF_SIZE (VGA_TEXT_TERM_COLS * VGA_TEXT_TERM_ROWS * 2)
+#define VGA_TEXT_TERM_BUF_SIZE    (VGA_TEXT_TERM_COLS * VGA_TEXT_TERM_ROWS * 2)
 /* Size of terminal buffer in characters */
-#define VGA_TEXT_TERM_SIZE             (VGA_TEXT_TERM_BUF_SIZE / 2)
+#define VGA_TEXT_TERM_SIZE            (VGA_TEXT_TERM_COLS * VGA_TEXT_TERM_ROWS)
 /* Width of tab characters */
 #define VGA_TEXT_TAB_WIDTH             8
 /* Ports for VGA card needed for text mode */
