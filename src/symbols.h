@@ -23,7 +23,7 @@ extern uint32_t _end_kernel;
 #define _INIT_PD                    (&_init_PD)
 extern uint32_t _init_PD;
 /* Address of initial page table */
-#define _INIT_PT                    (&_init_PT)
-extern uint32_t _init_PT;
+#define _INIT_PT0                   (&_init_PT0)
+extern uint32_t _init_PT0;
 
 #endif /* _SYMBOLS_H */

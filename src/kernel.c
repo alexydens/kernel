@@ -2,6 +2,7 @@
 #include "vga_text_term.h"
 #include "gdt.h"
 #include "idt.h"
+#include "paging.h"
 
 /* Keyboard handler */
 void keyboard_handler(irq_args_t *args) {
@@ -36,7 +37,11 @@ void kernel_main(void) {
   idt_init();
   add_irq_handler(1, keyboard_handler);
   vga_text_puts("===> Initialized Interrupt Descriptor Table.\r\n");
+  /* Initialize paging */
+  paging_init();
+  vga_text_puts("===> Initialized Paging.\r\n");
   /* Test */
+  *((uint8_t*)0xc0400000) = 0;
   __asm__ __volatile__ ("int $0x3");
   vga_text_puts("Hello world!\r\n");
   /* Loop */

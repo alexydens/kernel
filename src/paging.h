@@ -32,33 +32,24 @@
 #define PAGING_CHECK_FLAG(f, p) (((*p) & f) == 0 ? 0 : 1)
 
 /* Page directory entry */
-typedef struct {
-  uint32_t base:  20;
-  uint32_t flags: 12;
-} __attribute__((packed)) pde_entry_t;
-
+typedef uint32_t pde_entry_t;
 /* Page table entry */
-typedef struct {
-  uint32_t base:  20;
-  uint32_t flags: 12;
-} __attribute__((packed)) pte_entry_t;
-
-/* Flush a page that has recently been remapped */
-extern void flush_page(uint32_t address);
+typedef uint32_t pte_entry_t;
 
 /* Create a page directory entry */
 static inline pde_entry_t pde_entry(uint32_t base, uint32_t flags) {
-  pde_entry_t entry;
-  entry.base = base;
-  entry.flags = flags;
-  return entry;
+  return (uint32_t)base | flags;
 }
 /* Create a page table entry */
 static inline pte_entry_t pte_entry(uint32_t base, uint32_t flags) {
-  pte_entry_t entry;
-  entry.base = base;
-  entry.flags = flags;
-  return entry;
+  return (uint32_t)base | flags;
 }
+
+/* Flush a page that has recently been remapped */
+extern void flush_page(uint32_t address);
+/* Reloads page directory */
+extern void reload_pd(void);
+/* Initializes paging */
+extern void paging_init(void);
 
 #endif /* _PAGING_H */

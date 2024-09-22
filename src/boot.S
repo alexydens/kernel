@@ -92,7 +92,7 @@ _start:
   remove the first one later.
   */
   movl $(_init_PT0 - 0xc0000000 + 0x3), _init_PD - 0xc0000000
-  movl $(_init_PT0 - 0xc0000000 + 0x3), _init_PD - 0xc0000000 + 0x300 * 0x4
+  movl $(_init_PT0 - 0xc0000000 + 0x3), _init_PD - 0xc0000000 + 0xc00
 
   /* Now, we are ready to load the directory */
   /* Load the address of the page directory into CR3 */
@@ -100,7 +100,7 @@ _start:
   movl %ecx, %cr3
   /* Enable paging (and write protect) */
   movl %cr0, %ecx
-  orl $0x80010000, %ecx
+  orl $0x80000000, %ecx
   movl %ecx, %cr0
 
   /* Jump into the higher half, label 3 */
