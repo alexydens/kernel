@@ -18,6 +18,7 @@ void keyboard_handler(irq_args_t *args) {
     vga_text_puts(" (up)\r\n");
   else
     vga_text_puts(" (down)\r\n");
+  (void)args;
 }
 
 /* Kernel entry point */

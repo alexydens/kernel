@@ -51,6 +51,8 @@ typedef struct {
   uint32_t eip, cs, eflags;
   uint32_t esp, ss;
 } irq_args_t;
+/* Callback for an IRQ */
+typedef void (*irq_handler_t)(irq_args_t *args);
 
 /* Create IDT entry */
 static inline idt_entry_t idt_entry(
@@ -69,6 +71,6 @@ static inline idt_entry_t idt_entry(
 /* Initializes the IDT */
 extern void idt_init(void);
 /* Add IRQ handler */
-extern void add_irq_handler(uint8_t irq, void *handler);
+extern void add_irq_handler(uint8_t irq, irq_handler_t handler);
 
 #endif /* _IDT_H */

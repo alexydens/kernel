@@ -229,6 +229,6 @@ void idt_init(void) {
 }
 
 /* Add IRQ handler */
-void add_irq_handler(uint8_t irq, void *handler) {
+void add_irq_handler(uint8_t irq, irq_handler_t handler) {
   irq_callbacks[irq] = handler;
 }
