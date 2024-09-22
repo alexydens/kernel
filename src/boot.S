@@ -1,7 +1,8 @@
 /* Multiboot consts */
 .set ALIGN,   1<<0                /* align loaded modules */
 .set MEMINFO, 1<<1                /* provide memory map */
-.set FLAGS,   ALIGN | MEMINFO     /* multiboot 'flags' */
+.set VIDINFO, 1<<2                /* provide video info */
+.set FLAGS,   ALIGN | MEMINFO | VIDINFO /* multiboot 'flags' */
 .set MAGIC,   0x1BADB002					/* magic num so bootloader finds header */
 .set CHECKSUM, -(MAGIC + FLAGS)		/* checksum prooves this is multiboot */
 
@@ -15,6 +16,11 @@ The bootloader finds this in the first *KiB of kernel (align 32-bit bounds).
 .long MAGIC
 .long FLAGS
 .long CHECKSUM
+.long 0, 0, 0, 0, 0
+.long 1
+.long 0, 0, 0
+/*.long 0
+.long 1920, 1080, 0*/
 
 /*
 Reserve stack space.
