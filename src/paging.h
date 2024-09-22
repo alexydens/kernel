@@ -5,6 +5,7 @@
 /* Includes */
 #include <stdint.h>
 #include <stddef.h>
+#include "utils.h"
 #include "symbols.h"
 
 /* Consts */
@@ -51,5 +52,12 @@ extern void flush_page(uint32_t address);
 extern void reload_pd(void);
 /* Initializes paging */
 extern void paging_init(void);
+
+/* Map a page frame */
+extern void map_page_frame(
+    uint32_t physical_addr,
+    uint32_t virtual_addr,
+    uint8_t flags
+);
 
 #endif /* _PAGING_H */
