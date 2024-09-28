@@ -5,9 +5,9 @@
 /* Some utility functions, such as the ones the stdlib would usually provide */
 
 /* Includes */
-#include <types.h>
-#include <consts.h>
-#include <macros.h>
+#include <core/types.h>
+#include <core/consts.h>
+#include <core/macros.h>
 
 /* Hex string from an 8 bit number */
 static inline void hex_str_8(u8 num, char *str) {
