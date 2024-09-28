@@ -1,77 +1,85 @@
-# Source files (asm, c, maybe some C++)
+# Directories
 SRC_DIR=src
-# Binary files (e.g. image)
+INC_DIR=include
 BIN_DIR=bin
-# Object files
 OBJ_DIR=obj
-# Cross compiler and tools
+LOG_DIR=log
+GRUB_ISODIR=isodir
 CROSS_DIR=../toolchain/build-i686-elf
 
-# GNU Compiler Collection (C compiler)
+# Toolchain
 CC=$(CROSS_DIR)/bin/i686-elf-gcc
-# C PreProcessor
-CPP=$(CROSS_DIR)/bin/i686-elf-cpp
-# C++ Compiler
 CXX=$(CROSS_DIR)/bin/i686-elf-g++
-# Assembler
 AS=$(CROSS_DIR)/bin/i686-elf-as
-# Linker
 LD=$(CROSS_DIR)/bin/i686-elf-ld
-# Archiver
 AR=$(CROSS_DIR)/bin/i686-elf-ar
-# Strip (remove info from obj file)
 STRIP=$(CROSS_DIR)/bin/i686-elf-strip
-# Objcopy (copy obj files, translate obj files)
 OBJCOPY=$(CROSS_DIR)/bin/i686-elf-objcopy
 
-# C Compiler flags
-CFLAGS = -std=c11 -ffreestanding -Wall -Wextra -Wpedantic
-# C++ Compiler flags
-CXXFLAGS = -std=c++17 -ffreestanding -Wall -Wextra -Wpedantic -fno-exceptions -fno-rtti
+# C compiler flags
+CFLAGS = -std=c11 -Wall -Wextra -Wpedantic
+CFLAGS += -ffast-math -O2 -ffreestanding
+CFLAGS += -I$(INC_DIR)
+# C++ compiler flags
+CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic
+CXXFLAGS += -ffast-math -O2 -ffreestanding
+CXXFLAGS += -fno-exceptions -fno-rtti
+CXXFLAGS += -I$(INC_DIR)
 # Linker flags
-LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -lgcc
+LDFLAGS = -Tlinker.ld
 
-# Sources in C
+# Source files
 C_SOURCES = $(wildcard $(SRC_DIR)/*.c)
-# Sources in asm
+CXX_SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
 ASM_SOURCES = $(wildcard $(SRC_DIR)/*.S)
-
 # Object files
 OBJECTS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SOURCES))
+OBJECTS += $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(CXX_SOURCES))
 OBJECTS += $(patsubst $(SRC_DIR)/%.S,$(OBJ_DIR)/%.o,$(ASM_SOURCES))
 
-# Compile C code
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+# Compile sources
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
-
-# Compile assembly code
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.S
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.S | $(OBJ_DIR)
 	$(AS) -o $@ $<
 
-# Link into main binary
-$(BIN_DIR)/main.bin: $(OBJECTS)
-	$(CC) $(LDFLAGS) -o $@ $^
+# Link objects
+$(BIN_DIR)/main.bin: $(OBJECTS) | $(BIN_DIR)
+	$(LD) $(LDFLAGS) -o $@ $^
 
-# Make image
+# GRUB image
 $(BIN_DIR)/main.iso: $(BIN_DIR)/main.bin
-	rm -rf isodir
-	mkdir -p isodir/boot/grub
-	cp $(BIN_DIR)/main.bin isodir/boot/main.bin
-	cp grub.cfg isodir/boot/grub/grub.cfg
-	grub-mkrescue -o $(BIN_DIR)/main.iso isodir
+	rm -rf $(GRUB_ISODIR)
+	mkdir -p $(GRUB_ISODIR)/boot/grub
+	cp $(BIN_DIR)/main.bin $(GRUB_ISODIR)/boot/main.bin
+	cp grub.cfg $(GRUB_ISODIR)/boot/grub/grub.cfg
+	grub-mkrescue -o $(BIN_DIR)/main.iso $(GRUB_ISODIR)
+
+# Directories
+$(BIN_DIR):
+	mkdir -p $@
+$(OBJ_DIR):
+	mkdir -p $@
+$(LOG_DIR):
+	mkdir -p $@
 
 # Phony targets
 .PHONY: build clean test
 
-# Build
-build: $(BIN_DIR)/main.iso
+# Build bin file
+build: $(BIN_DIR)/main.bin
 
-# Test
-test: $(BIN_DIR)/main.iso
-	qemu-system-i386 -cdrom $(BIN_DIR)/main.iso
+# Test with qemu and GRUB
+test: $(BIN_DIR)/main.iso | $(LOG_DIR)
+	qemu-system-i386 -cdrom $(BIN_DIR)/main.iso -m 128M \
+		-chardev stdio,id=char0,logfile=$(LOG_DIR)/serial_com1.log,signal=off \
+		-serial chardev:char0
 
-# Clean up
+# Clean up project folder
 clean:
-	rm -rf $(OBJ_DIR)/*
-	rm -rf $(BIN_DIR)/*
-	rm -rf isodir
+	rm -rf $(BIN_DIR)
+	rm -rf $(OBJ_DIR)
+	rm -rf $(LOG_DIR)
+	rm -rf $(GRUB_ISODIR)

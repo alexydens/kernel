@@ -20,7 +20,7 @@ The bootloader finds this in the first *KiB of kernel (align 32-bit bounds).
 .long 1
 .long 0, 0, 0
 /*.long 0
-.long 1920, 1080, 0*/
+.long 320, 200, 0*/
 
 /*
 Reserve stack space.
@@ -56,8 +56,8 @@ _start:
   /* ESI will store the physical address of the page being allocated */
   movl $0x0, %esi
   /* The ECX stores loop count. In this case, we loop one time for each PF */
-  /* (1023 times - in hex for consistency) */
-  movl $0x3ff, %ecx
+  /* (1022 times - in hex for consistency) */
+  movl $0x3fe, %ecx
 
 1:
   /* If the pointer is less than the start of kernel, go to 1: */
@@ -83,6 +83,8 @@ _start:
 
 3:
   /* We are after the kernel. It's go time! */
+  /* Add the VGA memory to the last page in the first table */
+  movl $(0x000a0000 | 0x3), _init_PT0 - 0xc0000000 + 0x3fe * 0x4
   /* Add the VGA memory to the last page in the first table */
   movl $(0x000b8000 | 0x3), _init_PT0 - 0xc0000000 + 0x3ff * 0x4
 
@@ -118,6 +120,9 @@ _start:
 
   /* Put the stack registers in the right places */
   movl $_stack_top, %esp
+
+  /* Argument one - pointer to multiboot info struct */
+  pushl %ebx
 
   /* Call kernel - linked in C function */
   call kernel_main
