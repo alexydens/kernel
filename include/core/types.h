@@ -44,7 +44,7 @@ typedef void (*fn_ptr_t)(void);
 
 /* A buffer */
 typedef struct {
-  void *data;
+  void *ptr;
   size_t size;
 } buf_t;
 

@@ -164,7 +164,7 @@ struct multiboot_info
   {
     multiboot_aout_symbol_table_t aout_sym;
     multiboot_elf_section_header_table_t elf_sec;
-  } u __attribute__((packed));
+  } __attribute__((packed)) u;
 
   /* Memory Mapping buffer */
   multiboot_uint32_t mmap_length;
