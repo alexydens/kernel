@@ -1,9 +1,10 @@
 /* Includes */
 #include <core/types.h>
+#include <core/logging.h>
 #include <ext/multiboot.h>
 #include <io/serial.h>
 #include <io/vga_term.h>
-#include <core/logging.h>
+#include <sys/gdt.h>
 
 /* Entry point */
 void kernel_main(multiboot_info_t *mb_info) {
@@ -17,6 +18,9 @@ void kernel_main(multiboot_info_t *mb_info) {
   vga_term_set_color(VGA_TERM_COLOR_LIGHT_GREY, VGA_TERM_COLOR_BLUE);
   vga_term_set_cursor(0, 0);
   vga_term_clear(0);
+  /* Initialize Global Descriptor Table */
+  gdt_init();
+  LOG("===> Initialized Global Descriptor Table\r\n");
 
   /* Testing */
   LOG("Hello world!\r\n");
