@@ -19,6 +19,12 @@
  *  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*
+ * NOTE: this copy has been modified by https://github.com/alexydens. The
+ * original can be found from the GNU website at:
+ * https://www.gnu.org/software/grub/manual/multiboot/html_node/multiboot_002eh.html
+ */
+
 #ifndef MULTIBOOT_HEADER
 #define MULTIBOOT_HEADER 1
 
