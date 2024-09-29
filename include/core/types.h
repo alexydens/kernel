@@ -1,6 +1,6 @@
 /* Include guard */
-#ifndef _TYPES_H
-#define _TYPES_H
+#ifndef _CORE_TYPES_H
+#define _CORE_TYPES_H
 
 /*
  * This contains some base types for the operating system, as well as some more
@@ -48,4 +48,4 @@ typedef struct {
   size_t size;
 } buf_t;
 
-#endif /* _TYPES_H */
+#endif /* _CORE_TYPES_H */

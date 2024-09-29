@@ -1,6 +1,6 @@
 /* Include guard */
-#ifndef _CONSTS_H
-#define _CONSTS_H
+#ifndef _CORE_CONSTS_H
+#define _CORE_CONSTS_H
 
 /* Some constants */
 
@@ -49,4 +49,4 @@
 /* NaN */
 #define NAN                (0.0 / 0.0)
 
-#endif /* _CONSTS_H */
+#endif /* _CORE_CONSTS_H */

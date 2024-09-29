@@ -3,6 +3,7 @@
 #include <ext/multiboot.h>
 #include <io/serial.h>
 #include <io/vga_term.h>
+#include <core/logging.h>
 
 /* Entry point */
 void kernel_main(multiboot_info_t *mb_info) {
@@ -18,8 +19,7 @@ void kernel_main(multiboot_info_t *mb_info) {
   vga_term_clear(0);
 
   /* Testing */
-  serial_send_str(SERIAL_COM1, "Hello, World!\n");
-  vga_term_puts("Hello, World!\r\n");
+  LOG("Hello world!\r\n");
 
   /* Hang when finished */
   __asm__ __volatile__ ("cli;hlt");

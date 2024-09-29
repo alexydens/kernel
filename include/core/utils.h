@@ -1,6 +1,6 @@
 /* Include guard */
-#ifndef _UTILS_H
-#define _UTILS_H
+#ifndef _CORE_UTILS_H
+#define _CORE_UTILS_H
 
 /* Some utility functions, such as the ones the stdlib would usually provide */
 
@@ -55,4 +55,4 @@ static inline size_t strlen(const char *str) {
   return len;
 }
 
-#endif /* _UTILS_H */
+#endif /* _CORE_UTILS_H */

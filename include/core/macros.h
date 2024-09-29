@@ -1,6 +1,6 @@
 /* Include guard */
-#ifndef _MACROS_H
-#define _MACROS_H
+#ifndef _CORE_MACROS_H
+#define _CORE_MACROS_H
 
 /* This contains some utility macros */
 
@@ -37,4 +37,4 @@
 /* Hex char from number */
 #define HEX_CHAR(x)            ((x) < 10 ? '0' + (x) : 'A' + (x) - 10)
 
-#endif /* _MACROS_H */
+#endif /* _CORE_MACROS_H */
