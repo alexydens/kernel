@@ -6,6 +6,7 @@
 #include <io/vga_term.h>
 #include <sys/gdt.h>
 #include <sys/idt.h>
+#include <sys/paging.h>
 
 /* Entry point */
 void kernel_main(multiboot_info_t *mb_info) {
@@ -25,10 +26,9 @@ void kernel_main(multiboot_info_t *mb_info) {
   /* Initialize Interrupt Descriptor Table */
   idt_init();
   LOG("===> Initialized Interrupt Descriptor Table\r\n");
-
-  /* Testing */
-  LOG("Hello world!\r\n");
-  __asm__ __volatile__ ("int $0x3");
+  /* Initialize paging */
+  paging_init();
+  LOG("===> Initialized Paging\r\n");
 
   /* Hang when finished */
   __asm__ __volatile__ ("cli;hlt");
