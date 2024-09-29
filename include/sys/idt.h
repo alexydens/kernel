@@ -31,6 +31,49 @@
 #define PIC_COMMAND_INIT      (0x11)
 #define PIC_COMMAND_ACK       (0x20)
 
+/* Interrupts */
+#define INT_DIVISION_BY_ZERO          (0)
+#define INT_SINGLE_STEP               (1)
+#define INT_NMI                       (2)
+#define INT_BREAKPOINT                (3)
+#define INT_OVERFLOW                  (4)
+#define INT_BOUNDS                    (5)
+#define INT_INVALID_OPCODE            (6)
+#define INT_DEVICE_NOT_FOUND          (7)
+#define INT_DOUBLE_FAULT              (8)
+#define INT_COPROCESSOR_OVERRUN       (9)
+#define INT_INVALID_TSS               (10)
+#define INT_SEGMENT_NOT_PRESENT       (11)
+#define INT_STACK_FAULT               (12)
+#define INT_GENERAL_PROTECTION_FAULT  (13)
+#define INT_PAGE_FAULT                (14)
+/* 15 is reserved */
+#define INT_X87_FLOATING_POINT_ERROR  (16)
+#define INT_ALIGNMENT_CHECK           (17)
+#define INT_MACHINE_CHECK             (18)
+#define INT_SIMD_FLOATING_POINT_ERROR (19)
+#define INT_VIRTUALIZATION_ERROR      (20)
+#define INT_CONTROL_PROTECTION_ERROR  (21)
+/* 22-27 are reserved */
+#define INT_HYPRVISOR_INJECTION_ERROR (28)
+#define INT_VMM_COMMUNICATION_ERROR   (29)
+#define INT_SECURITY_EXCEPTION        (30)
+/* 31 is reserved */
+#define INT_PIC_PIT                   (32)
+#define INT_PIC_PS2                   (33)
+/* 34 is reserved */
+#define INT_PIC_COM2                  (35)
+#define INT_PIC_COM1                  (36)
+#define INT_PIC_LPT2                  (37)
+#define INT_PIC_FLOPPY                (38)
+#define INT_PIC_LPT1                  (39)
+#define INT_PIC_RTC                   (40)
+#define INT_PIC_GENERAL_IO_START      (41)
+#define INT_PIC_GENERAL_IO_END        (44)
+#define INT_PIC_COPROCESSOR           (45)
+#define INT_PIC_IDE_BUS1              (46)
+#define INT_PIC_IDE_BUS2              (47)
+
 /* IDT Descriptor */
 typedef struct {
   u16 limit;
