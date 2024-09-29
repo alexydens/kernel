@@ -5,6 +5,7 @@
 #include <io/serial.h>
 #include <io/vga_term.h>
 #include <sys/gdt.h>
+#include <sys/idt.h>
 
 /* Entry point */
 void kernel_main(multiboot_info_t *mb_info) {
@@ -21,9 +22,13 @@ void kernel_main(multiboot_info_t *mb_info) {
   /* Initialize Global Descriptor Table */
   gdt_init();
   LOG("===> Initialized Global Descriptor Table\r\n");
+  /* Initialize Interrupt Descriptor Table */
+  idt_init();
+  LOG("===> Initialized Interrupt Descriptor Table\r\n");
 
   /* Testing */
   LOG("Hello world!\r\n");
+  __asm__ __volatile__ ("int $0x3");
 
   /* Hang when finished */
   __asm__ __volatile__ ("cli;hlt");
