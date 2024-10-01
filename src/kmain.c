@@ -9,16 +9,20 @@
 #include <sys/paging.h>
 
 /* Entry point */
-void kernel_main(multiboot_info_t *mb_info) {
+void kernel_main(u32 mb_info_addr) {
   /* Variables */
+  multiboot_info_t *mb_info = (multiboot_info_t *)(mb_info_addr+0xc0000000);
+  char str[256];
 
   /* Initialization */
   /* Initialize vga terminal */
+#ifdef VGA_TERM_ENABLED
   /*vga_term_set_color(VGA_TERM_COLOR_GREEN, VGA_TERM_COLOR_BLACK);*/
   vga_term_set_color(VGA_TERM_COLOR_LIGHT_GREY, VGA_TERM_COLOR_BLUE);
   vga_term_set_cursor(0, 0);
   vga_term_clear(0);
   LOG("===> Initialized VGA Terminal\r\n");
+#endif
   /* Initialize serial port 1 */
   serial_configure(SERIAL_COM1);
   LOG("===> Initialized Serial Port: COM1\r\n");
@@ -32,12 +36,9 @@ void kernel_main(multiboot_info_t *mb_info) {
   paging_init();
   LOG("===> Initialized Paging\r\n");
 
-  /* Test */
-  LOG(((char*)(mb_info->cmdline+0xc0000000)));
-
   /* Hang when finished */
   __asm__ __volatile__ ("cli;hlt");
   while (1);
   /* Stop compiler warning 'unused variable' */
-  (void)mb_info;
+  (void)mb_info_addr;
 }

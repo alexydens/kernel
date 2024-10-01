@@ -8,11 +8,19 @@
 #include <io/vga_term.h>
 
 /* Macros */
+#ifdef VGA_TERM_ENABLED
 /* Log something to the vga text terminal and the serial port */
 #define LOG(msg) do {\
   vga_term_puts(msg);\
   serial_send_str(SERIAL_COM1, msg);\
 } while (0)
+#else
+/* Log something to the serial port */
+#define LOG(msg) do {\
+  vga_term_puts(msg);\
+  serial_send_str(SERIAL_COM1, msg);\
+} while (0)
+#endif
 
 /* Assertion in kernel */
 #define ASSERT(expr) do {\

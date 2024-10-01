@@ -17,10 +17,12 @@ The bootloader finds this in the first *KiB of kernel (align 32-bit bounds).
 .long FLAGS
 .long CHECKSUM
 .long 0, 0, 0, 0, 0
+/*
 .long 1
 .long 0, 0, 0
-/*.long 0
-.long 320, 200, 0*/
+*/
+.long 0
+.long 1920, 1080, 32
 
 /*
 Reserve stack space.
