@@ -61,10 +61,38 @@ struct isr_args {
   u32 esp, ss;
 };
 void isr_handler_common(struct isr_args *args) {
+  /* Variables */
+  u32 page_fault_addr;
+  char addr_str[9];
   /* Print the interrupt name */
   LOG("Interrupt: ");
   LOG(iterrupt_names[args->interrupt_number]);
   LOG("\r\n");
+  switch (args->interrupt_number) {
+    case 14: /* Page fault */
+      /* Error code */
+      /* User/supervisor */
+      if (args->error_code & 0x4) LOG("Supervisor ");
+      else LOG("User ");
+      /* Read/write */
+      if (args->error_code & 0x2) LOG("tried to read ");
+      else LOG("tried to write ");
+      /* Present */
+      if (args->error_code & 0x1) LOG("a present page\r\n");
+      else LOG("a non-present page\r\n");
+      /* Print the faulting address */
+      LOG("Address was: 0x");
+      __asm__ __volatile__ ("mov %%cr2, %0" : "=r" (page_fault_addr));
+      hex_str_32(page_fault_addr, addr_str);
+      LOG(addr_str);
+      LOG("\r\n");
+      LOG("Halting...\r\n");
+      __asm__ __volatile__ ("cli;hlt");
+
+      break;
+    default:
+      break;
+  }
 }
 /* Generic irq handler */
 void irq_handler_common(irq_args_t *args) {

@@ -6,6 +6,7 @@ isr_common:
   call isr_handler_common
   popl %eax
   add $8, %esp
+  cli
   iret
 .size isr_common, .-isr_common
 
