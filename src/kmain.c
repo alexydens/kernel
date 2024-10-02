@@ -2,6 +2,7 @@
 #include <core/types.h>
 #include <core/logging.h>
 #include <ext/multiboot.h>
+#include <ext/font8x8_basic.h>
 #include <io/serial.h>
 #include <io/vga_term.h>
 #include <sys/gdt.h>
@@ -64,8 +65,27 @@ void kernel_main(u32 mb_info_addr) {
     );
     flush_page(0xfd000000 + i * 0x1000);
   }
-  for (u32 i = 0; i < 1080 * 1920; i++) {
-    ((u16*)0xfd000000)[i] = 0xffff;
+  for (u32 x = 0; x < 8; x++) {
+    for (u32 y = 0; y < 8; y++) {
+      if (font8x8_basic['A'][y] & (1 << x)) {
+        ((u16 *)0xfd000000)[(x*4+0) + (y*4+0) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+1) + (y*4+0) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+2) + (y*4+0) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+3) + (y*4+0) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+0) + (y*4+1) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+1) + (y*4+1) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+2) + (y*4+1) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+3) + (y*4+1) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+0) + (y*4+2) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+1) + (y*4+2) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+2) + (y*4+2) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+3) + (y*4+2) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+0) + (y*4+3) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+1) + (y*4+3) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+2) + (y*4+3) * 1920] = 0xffff;
+        ((u16 *)0xfd000000)[(x*4+3) + (y*4+3) * 1920] = 0xffff;
+      }
+    }
   }
 
   /* Hang when finished */
