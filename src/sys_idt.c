@@ -72,8 +72,8 @@ void isr_handler_common(struct isr_args *args) {
     case 14: /* Page fault */
       /* Error code */
       /* User/supervisor */
-      if (args->error_code & 0x4) LOG("Supervisor ");
-      else LOG("User ");
+      if (args->error_code & 0x4) LOG("User ");
+      else LOG("Supervisor ");
       /* Read/write */
       if (args->error_code & 0x2) LOG("tried to read ");
       else LOG("tried to write ");

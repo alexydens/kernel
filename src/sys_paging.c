@@ -41,9 +41,8 @@ void paging_init(void) {
   );
 
   /* Fill the cleared out area with non-present readwrite pages */
-  /* There are 1022 spaces left in the PD */
-  for (u16 i = 0; i < 1024; i++) {
-    ((u32*)PTE_MEM_START)[i] = 0x00000002;
+  for (u32 i = 0; i < 1024 * 1024; i++) {
+    ((pte_entry_t *)PTE_MEM_START)[i] = 0x00000002;
   }
   /*
    * NOTE: I was completely expecting a page fault and 30mins of debugging asm
@@ -56,7 +55,7 @@ void paging_init(void) {
     if (i == 0x301) continue;
     if (i == 0x300) continue;
     page_dir[i] = pde_entry(
-        PTE_MEM_START + i * 0x1000,
+        PTE_MEM_START + i * 0x1000 - 0xc0000000,
         PDE_FLAGS_PRESENT
         | PDE_FLAGS_RW
     );
@@ -69,9 +68,9 @@ void map_page_frame(
     u32 virtual_addr,
     u8 flags
 ) {
-  u16 pde_index = virtual_addr >> 22;
+  u16 pde_index = (virtual_addr >> 22) & 0x3ff;
   u16 pte_index = (virtual_addr >> 12) & 0x3ff;
-
+  
   if (pde_index == 0x300) page_table0[pte_index] = pte_entry(
       physical_addr,
       flags

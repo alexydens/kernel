@@ -41,11 +41,11 @@ typedef u32 pde_entry_t;
 typedef u32 pte_entry_t;
 
 /* Create a page directory entry */
-static inline pde_entry_t pde_entry(u32 base, u32 flags) {
+static inline pde_entry_t pde_entry(u32 base, u8 flags) {
   return (u32)base | flags;
 }
 /* Create a page table entry */
-static inline pte_entry_t pte_entry(u32 base, u32 flags) {
+static inline pte_entry_t pte_entry(u32 base, u8 flags) {
   return (u32)base | flags;
 }
 

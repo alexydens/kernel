@@ -18,11 +18,11 @@ OBJCOPY=$(CROSS_DIR)/bin/i686-elf-objcopy
 
 # C compiler flags
 CFLAGS = -std=c11 -Wall -Wextra -Wpedantic
-CFLAGS += -ffast-math -O2 -ffreestanding
+CFLAGS += -ffreestanding
 CFLAGS += -I$(INC_DIR)
 # C++ compiler flags
 CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic
-CXXFLAGS += -ffast-math -O2 -ffreestanding
+CXXFLAGS += -ffreestanding
 CXXFLAGS += -fno-exceptions -fno-rtti
 CXXFLAGS += -I$(INC_DIR)
 # Linker flags

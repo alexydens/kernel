@@ -36,9 +36,39 @@ void kernel_main(u32 mb_info_addr) {
   paging_init();
   LOG("===> Initialized Paging\r\n");
 
+  /* Test */
+  LOG("Framebuffer address: 0x");
+  hex_str_32(mb_info->framebuffer_addr, str);
+  LOG(str);
+  LOG("\r\n");
+  LOG("Framebuffer width: 0x");
+  hex_str_32(mb_info->framebuffer_width, str);
+  LOG(str);
+  LOG("\r\n");
+  LOG("Framebuffer height: 0x");
+  hex_str_32(mb_info->framebuffer_height, str);
+  LOG(str);
+  LOG("\r\n");
+  LOG("Framebuffer bits per pixel: 0x");
+  hex_str_32(mb_info->framebuffer_bpp, str);
+  LOG(str);
+  LOG("\r\n");
+
+  /* Remap framebuffer */
+  for (u32 i = 0; i < 1024; i++) {
+    map_page_frame(
+        0xfd000000 + i * 0x1000,
+        0xfd000000 + i * 0x1000,
+        PTE_FLAGS_RW
+        | PTE_FLAGS_PRESENT
+    );
+    flush_page(0xfd000000 + i * 0x1000);
+  }
+  for (u32 i = 0; i < 1080 * 1920; i++) {
+    ((u16*)0xfd000000)[i] = 0xffff;
+  }
+
   /* Hang when finished */
   __asm__ __volatile__ ("cli;hlt");
   while (1);
-  /* Stop compiler warning 'unused variable' */
-  (void)mb_info_addr;
 }
