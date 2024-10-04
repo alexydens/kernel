@@ -1,6 +1,9 @@
 /* Implements sys/paging.h */
 #include <sys/paging.h>
 
+/* Get u64 from two u32s */
+#define GET_U64(high, low) (((u64)high << 32) | (u64)low)
+
 /* Globals */
 __attribute__((aligned(0x1000)))
 pte_entry_t page_table1[1024];
@@ -8,6 +11,7 @@ extern u32 _init_PD;
 extern u32 _init_PT0;
 pde_entry_t *page_dir;
 pte_entry_t *page_table0;
+static buf_t _free_memory;
 
 /* Flush a page that has recently been remapped */
 void flush_page(u32 address) {
@@ -15,7 +19,10 @@ void flush_page(u32 address) {
 }
 
 /* Initializes paging */
-void paging_init(void) {
+void paging_init(multiboot_info_t *mb_info) {
+  /* Variables */
+  char str[17];
+
   /* Load the page table and page dir */
   page_dir = (pde_entry_t *)&_init_PD;
   page_table0 = (pte_entry_t *)&_init_PT0;
@@ -60,6 +67,51 @@ void paging_init(void) {
         | PDE_FLAGS_RW
     );
   }
+
+  /* Get memory map */
+  /* Flag for valid mmap */
+  ASSERT((mb_info->flags >> 6) & 0x1);
+  /* Get and log values */
+  for (
+      u32 i = 0;
+      i < mb_info->mmap_length;
+      i += sizeof(multiboot_memory_map_t)
+  ) {
+    multiboot_memory_map_t *mmap =
+      (multiboot_memory_map_t *)(mb_info->mmap_addr + i + 0xc0000000);
+    str[8] = '\0';
+    LOG("Available memory: Start: 0x");
+    hex_str_32(mmap->addr_high, str);
+    LOG(str);
+    hex_str_32(mmap->addr_low, str);
+    LOG(str);
+    LOG(" Length: 0x");
+    hex_str_32(mmap->len_high, str);
+    LOG(str);
+    hex_str_32(mmap->len_low, str);
+    LOG(str);
+    LOG(" Available: ");
+    LOG(BOOL_STR(mmap->type == MULTIBOOT_MEMORY_AVAILABLE));
+    LOG("\r\n");
+    if (GET_U64(mmap->len_high, mmap->len_low) > _free_memory.size) {
+      _free_memory.ptr = (void *)GET_U64(mmap->addr_high, mmap->addr_low);
+      _free_memory.size = GET_U64(mmap->len_high, mmap->len_low);
+    }
+  }
+  str[16] = 0;
+  LOG("Address of free memory: 0x");
+  hex_str_64((u64)_free_memory.ptr, str);
+  LOG(str);
+  LOG("\r\n");
+  LOG("Size of free memory: 0x");
+  hex_str_64(_free_memory.size, str);
+  LOG(str);
+  LOG("\r\n");
+}
+
+/* Get the largest block of free memory available */
+buf_t get_free_memory(void) {
+  return _free_memory;
 }
 
 /* Map a page frame */

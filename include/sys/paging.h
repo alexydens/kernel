@@ -3,6 +3,8 @@
 #define _SYS_PAGING_H
 
 /* Includes */
+#include <ext/multiboot.h>
+#include <core/logging.h>
 #include <core/types.h>
 #include <core/utils.h>
 #include <sys/gdt.h>
@@ -54,7 +56,10 @@ extern void flush_page(u32 address);
 /* Reloads page directory */
 extern void reload_pd(void);
 /* Initializes paging */
-extern void paging_init(void);
+extern void paging_init(multiboot_info_t *mb_info);
+
+/* Get the largest block of free memory available */
+extern buf_t get_free_memory(void);
 
 /* Map a page frame */
 extern void map_page_frame(

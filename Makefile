@@ -66,14 +66,14 @@ $(LOG_DIR):
 	mkdir -p $@
 
 # Phony targets
-.PHONY: build clean test
+.PHONY: build clean test test_headless
 
 # Build bin file
 build: $(BIN_DIR)/main.bin
 
 # Test with qemu and GRUB
 test: $(BIN_DIR)/main.iso | $(LOG_DIR)
-	qemu-system-i386 -cdrom $(BIN_DIR)/main.iso -m 128M \
+	qemu-system-i386 -cdrom $(BIN_DIR)/main.iso -m 4096M \
 		-chardev stdio,id=char0,logfile=$(LOG_DIR)/serial_com1.log,signal=off \
 		-serial chardev:char0
 

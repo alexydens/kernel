@@ -8,7 +8,7 @@
 #include <io/vga_term.h>
 
 /* Macros */
-#ifdef VGA_TERM_ENABLED
+#ifdef LOG_VGA_TERM
 /* Log something to the vga text terminal and the serial port */
 #define LOG(msg) do {\
   vga_term_puts(msg);\
