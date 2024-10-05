@@ -54,6 +54,11 @@ typedef struct {
   size_t len;
 } str_t;
 
+/* u32 from pointer */
+#define U32_PTR(x)             ((u32)((u64)x))
+/* pointer from u32 */
+#define PTR_U32(x)             ((void *)((u64)x))
+
 /* Hex char from number */
 #define HEX_CHAR(x)            ((x) < 10 ? '0' + (x) : 'A' + (x) - 10)
 /* Decimal char from number */

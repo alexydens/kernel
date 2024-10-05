@@ -17,7 +17,7 @@ extern u32 _end_kernel;
 
 /* I/O SUBSYSTEMS */
 /* Serial ports (COM1-COM4) */
-//#include <io/serial.h>
+#include <io/serial.h>
 /* VGA text mode 80x25 terminal */
 //#include <io/vga_term.h>
 /* PS/2 keyboard interface with PIC */
