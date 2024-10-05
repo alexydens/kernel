@@ -3,7 +3,7 @@ ENTRY(_start)
 SECTIONS
 {
   /* Physical addr of kernel: 0x00100000 */
-  . = 0x0010000;
+  . = 0x00010000;
   /* Symbol for physical address of start of kernel */
   _phys_start_kernel = .;
   /* Data and text (physical) used for multiboot header and bootstrap code */
