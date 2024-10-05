@@ -7,12 +7,12 @@
 #include <sys/gdt.h>
 #include <sys/idt.h>
 #include <sys/paging.h>
+#include <mem/page_alloc.h>
 
 /* Entry point */
 void kernel_main(u32 mb_info_addr) {
   /* Variables */
   multiboot_info_t *mb_info = (multiboot_info_t *)(mb_info_addr+0xc0000000);
-  char str[256];
 
   /* Initialization */
   /* Initialize vga terminal */
@@ -33,8 +33,11 @@ void kernel_main(u32 mb_info_addr) {
   /* Initialize paging */
   paging_init(mb_info);
   LOG("===> Initialized Paging\r\n");
-
+  /* Initialize page allocator */
+  page_alloc_init();
+  LOG("===> Initialized Page Allocator\r\n");
+  
   /* Hang when finished */
-  __asm__ __volatile__ ("cli;hlt");
   while (1);
+  __asm__ __volatile__ ("cli;hlt");
 }

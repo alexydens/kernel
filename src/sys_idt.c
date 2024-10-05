@@ -54,6 +54,7 @@ static idtr_t idtr;
 static idt_entry_t entries[256];
 static void (*irq_callbacks[16])(irq_args_t*);
 
+#include <core/logging.h>
 /* Generic isr handler */
 struct isr_args {
   u32 interrupt_number, error_code;
@@ -96,15 +97,6 @@ void isr_handler_common(struct isr_args *args) {
 }
 /* Generic irq handler */
 void irq_handler_common(irq_args_t *args) {
-  /* Print the irq number */
-  /*LOG("IRQ: ");
-  char str[3];
-  str[0] = '0' + (args->irq_number / 10);
-  str[1] = '0' + (args->irq_number % 10);
-  str[2] = '\0';
-  LOG(str);
-  LOG("\r\n");*/
-
   /* Call the irq callback */
   if (irq_callbacks[args->irq_number])
     irq_callbacks[args->irq_number](args);
