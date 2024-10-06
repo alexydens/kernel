@@ -112,11 +112,36 @@ struct isr_args {
   u32 esp, ss;
 };
 void isr_handler_common(struct isr_args *args) {
-  /* Print the interrupt name */
-  serial_printf("Unhandled exception: %s\n",
-      iterrupt_names[args->interrupt_number]);
-  serial_printf("Halting...\r\n");
-  __asm__ __volatile__ ("cli;hlt");
+  switch (args->interrupt_number) {
+    case 14: /* Page fault handler */
+      /* User/supervisor */
+      if (args->error_code & 0x4) serial_printf("User ");
+      else serial_printf("Supervisor ");
+      /* Read/write */
+      if (args->error_code & 0x2) serial_printf("tried to read ");
+      else serial_printf("tried to write ");
+      /* Present */
+      if (args->error_code & 0x1) serial_printf("a present page\r\n");
+      else serial_printf("a non-present page\r\n");
+
+      /* Print the faulting address */
+      u32 addr;
+      __asm__ __volatile__ ("mov %%cr2,%0" : "=r"(addr));
+      serial_printf("Address was: 0x%xd\r\n", addr);
+
+      /* Halt */
+      serial_printf("Halting...\r\n");
+      __asm__ __volatile__ ("cli;hlt");
+
+      break;
+    default: /* Just print and halt most interrupts */
+      /* Print the interrupt name */
+      serial_printf("Unhandled exception: %s\n",
+          iterrupt_names[args->interrupt_number]);
+      serial_printf("Halting...\r\n");
+      __asm__ __volatile__ ("cli;hlt");
+      break;
+  }
 }
 /* Generic irq handler */
 void irq_handler_common(irq_args_t *args) {
