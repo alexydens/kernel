@@ -68,3 +68,8 @@ void serial_set_divisor(u16 divisor, u16 port) {
   port_outb(SERIAL_DATA_PORT(port), (divisor >> 8) & 0xff);
   port_outb(SERIAL_DATA_PORT(port), (divisor) & 0xff);
 }
+
+/* Putc for serial printf */
+void _serial_putc(char c) {
+  serial_putc(c, SERIAL_PORT_COM1);
+}

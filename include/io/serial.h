@@ -4,6 +4,7 @@
 
 /* Includes */
 #include <core/types.h>
+#include <core/utils.h>
 #include <io/port.h>
 
 /* Serial ports (COM1-COM4) */
@@ -33,5 +34,11 @@ extern void serial_putc(char c, u16 port);
 extern void serial_puts(const char *str, u16 port);
 /* Change the divisor for a serial port */
 extern void serial_set_divisor(u16 divisor, u16 port);
+
+/* Putc for serial printf */
+extern void _serial_putc(char c);
+
+/* Print formatted to serial com1 */
+#define serial_printf(...) kprintf(_serial_putc, __VA_ARGS__)
 
 #endif /* _IO_SERIAL_H */

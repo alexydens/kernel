@@ -65,29 +65,29 @@ typedef struct {
 #define DEC_CHAR(x)            ((x) + '0')
 
 /* Convert from a boolean to a string */
-inline const char *bool_str(bool val) {
+static inline const char *bool_str(bool val) {
   return val ? "true" : "false";
 }
 /* Convert a u8 to a hex string */
-inline void u8_hexstr(u8 val, char *str) {
+static inline void u8_hexstr(u8 val, char *str) {
   for (int i = 0; i < 2; i++) {
     str[1 - i] = HEX_CHAR((val >> (i * 4)) & 0xF);
   }
 }
 /* Convert a u8 to a decimal string (3 digits) */
-inline void u8_decstr(u8 val, char *str) {
+static inline void u8_decstr(u8 val, char *str) {
   str[2] = DEC_CHAR((val % 10));
   str[1] = DEC_CHAR((val / 10) % 10);
   str[0] = DEC_CHAR((val / 100) % 10);
 }
 /* Convert a u16 to a hex string */
-inline void u16_hexstr(u16 val, char *str) {
+static inline void u16_hexstr(u16 val, char *str) {
   for (int i = 0; i < 4; i++) {
     str[3 - i] = HEX_CHAR((val >> (i * 4)) & 0xF);
   }
 }
 /* Convert a u16 to a decimal string (5 digits) */
-inline void u16_decstr(u16 val, char *str) {
+static inline void u16_decstr(u16 val, char *str) {
   str[4] = DEC_CHAR((val % 10));
   str[3] = DEC_CHAR((val / 10) % 10);
   str[2] = DEC_CHAR((val / 100) % 10);
@@ -95,13 +95,13 @@ inline void u16_decstr(u16 val, char *str) {
   str[0] = DEC_CHAR((val / 10000) % 10);
 }
 /* Convert a u32 to a hex string */
-inline void u32_hexstr(u32 val, char *str) {
+static inline void u32_hexstr(u32 val, char *str) {
   for (int i = 0; i < 8; i++) {
     str[7 - i] = HEX_CHAR((val >> (i * 4)) & 0xF);
   }
 }
 /* Convert a u32 to a decimal string (10 digits) */
-inline void u32_decstr(u32 val, char *str) {
+static inline void u32_decstr(u32 val, char *str) {
   str[9] = DEC_CHAR((val % 10));
   str[8] = DEC_CHAR((val / 10) % 10);
   str[7] = DEC_CHAR((val / 100) % 10);
@@ -113,14 +113,15 @@ inline void u32_decstr(u32 val, char *str) {
   str[1] = DEC_CHAR((val / 100000000) % 10);
   str[0] = DEC_CHAR((val / 1000000000) % 10);
 }
+#ifdef U64_DIV_ALLOWED
 /* Convert a u64 to a hex string */
-inline void u64_hexstr(u64 val, char *str) {
+static inline void u64_hexstr(u64 val, char *str) {
   for (int i = 0; i < 16; i++) {
     str[15 - i] = HEX_CHAR((val >> (i * 4)) & 0xF);
   }
 }
 /* Convert a u64 to a decimal string (20 digits) */
-inline void u64_decstr(u64 val, char *str) {
+static inline void u64_decstr(u64 val, char *str) {
   str[19] = DEC_CHAR((val % 10));
   str[18] = DEC_CHAR((val / 10) % 10);
   str[17] = DEC_CHAR((val / 100) % 10);
@@ -142,8 +143,10 @@ inline void u64_decstr(u64 val, char *str) {
   str[1] =  DEC_CHAR((val / 1000000000000000000) % 10);
   str[0] =  DEC_CHAR((val / 10000000000000000000u) % 10);
 }
+#endif
 /* Convert an i8 to a decimal string (3 digits + sign) */
-inline void i8_decstr(i8 val, char *str) {
+static inline void i8_decstr(i8 val, char *str) {
+  str[0] = ' ';
   if (val < 0) {
     str[0] = '-';
     val = -val;
@@ -151,7 +154,8 @@ inline void i8_decstr(i8 val, char *str) {
   u8_decstr(val, str + 1);
 }
 /* Convert an i16 to a decimal string (5 digits + sign) */
-inline void i16_decstr(i16 val, char *str) {
+static inline void i16_decstr(i16 val, char *str) {
+  str[0] = ' ';
   if (val < 0) {
     str[0] = '-';
     val = -val;
@@ -159,20 +163,24 @@ inline void i16_decstr(i16 val, char *str) {
   u16_decstr(val, str + 1);
 }
 /* Convert an i32 to a decimal string (10 digits + sign) */
-inline void i32_decstr(i32 val, char *str) {
+static inline void i32_decstr(i32 val, char *str) {
+  str[0] = ' ';
   if (val < 0) {
     str[0] = '-';
     val = -val;
   }
   u32_decstr(val, str + 1);
 }
+#ifdef I64_DIV_ALLOWED
 /* Convert an i64 to a decimal string (20 digits + sign) */
-inline void i64_decstr(i64 val, char *str) {
+static inline void i64_decstr(i64 val, char *str) {
+  str[0] = ' ';
   if (val < 0) {
     str[0] = '-';
     val = -val;
   }
   u64_decstr(val, str + 1);
 }
+#endif
 
 #endif /* _CORE_TYPES_H */
