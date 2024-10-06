@@ -41,9 +41,9 @@ extern u32 _init_PD[1024];
 
 /* SYSTEM SUBSYSTEMS */
 /* The IDT, ISRs, IRQs and the PIC */
-//#include <sys/interrupts.h>
-/* The GDT and TSS */
-//#include <sys/segmentation.h>
+#include <sys/idt.h>
+/* The GDT */
+#include <sys/gdt.h>
 /* Any setup required for memory management with paging */
 //#include <sys/paging.h>
 

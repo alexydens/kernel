@@ -18,10 +18,12 @@ OBJCOPY=$(CROSS_DIR)/bin/i686-elf-objcopy
 
 # C compiler flags
 CFLAGS = -std=c11 -Wall -Wextra -Wpedantic
+CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 CFLAGS += -ffreestanding
 CFLAGS += -I$(INC_DIR)
 # C++ compiler flags
 CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic
+CXXFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 CXXFLAGS += -ffreestanding
 CXXFLAGS += -fno-exceptions -fno-rtti
 CXXFLAGS += -I$(INC_DIR)
