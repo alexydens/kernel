@@ -14,6 +14,10 @@ extern u32 _start_kernel;
 extern u32 _end_kernel;
 /* Size of the kernel */
 #define KERNEL_SIZE (&_end_kernel - &_start_kernel)
+/* The initial page table */
+extern u32 _init_PT0[1024];
+/* The initial page directory */
+extern u32 _init_PD[1024];
 
 /* I/O SUBSYSTEMS */
 /* Serial ports (COM1-COM4) */
