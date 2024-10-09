@@ -51,7 +51,7 @@ void kernel_main(unsigned int mb_info_addr) {
   serial_printf("===> Initialized page frame allocator\r\n");
 
   /* ----- TEST ----- */
-  serial_printf("Hello, world!\r\n");
+  serial_printf("Testnum: %is\r\n", -49);
 
   /* ----- HALT ----- */
   /* Loop infinitely */
