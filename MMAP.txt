@@ -1,9 +1,0 @@
-FIXED POSITION MEMORY:
-- Kernel code:  0x00100000 - 0x003ff000 => 0xc0100000 - 0xc03ff000
-- VGA buffer:   0x000b8000 - 0x000b8fff => 0xc03ff000 - 0xc03fffff
-- Page tables:  0x00400000 - 0x007fffff => 0xc0400000 - 0xc07fffff
-MAPPED WITH ALLOCATOR:
-- Kernel heap:  WHATEVER PAGES IT GETS  => 0xc0800000 - 0xffffffff
-- User stack:   WHATEVER PAGES IT GETS  => 0xa0000000 - 0xbfffffff
-- User heap:    WHATEVER PAGES IT GETS  => 0x90000000 - 0xafffffff
-- User code:    WHATEVER PAGES IT GETS  => 0x00000000 - 0x9fffffff
