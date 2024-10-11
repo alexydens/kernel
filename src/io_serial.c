@@ -32,10 +32,10 @@ static void _setup_com(u16 port) {
 
 /* Initialize all serial ports (return false on error) */
 bool serial_init(void) {
-  serial_set_divisor(2, SERIAL_PORT_COM1);
-  serial_set_divisor(2, SERIAL_PORT_COM2);
-  serial_set_divisor(2, SERIAL_PORT_COM3);
-  serial_set_divisor(2, SERIAL_PORT_COM4);
+  serial_set_divisor(1, SERIAL_PORT_COM1);
+  serial_set_divisor(1, SERIAL_PORT_COM2);
+  serial_set_divisor(1, SERIAL_PORT_COM3);
+  serial_set_divisor(1, SERIAL_PORT_COM4);
   _setup_com(SERIAL_PORT_COM1);
   _setup_com(SERIAL_PORT_COM2);
   _setup_com(SERIAL_PORT_COM3);
