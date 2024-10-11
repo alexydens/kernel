@@ -3,6 +3,12 @@
 #include <core/types.h>
 #include <core/conf.h>
 
+/* Globals */
+__attribute__((aligned(0x1000)))
+u32 pt[1024];
+__attribute__((aligned(0x1000)))
+u32 pt2[1024];
+
 /* Keyboard handler */
 void keyboard_handler(irq_args_t *args) {
   /* Get the scancode */
@@ -41,7 +47,7 @@ void kernel_main(unsigned int mb_info_addr) {
     __asm__ __volatile__ ("int $0x3");
   }
   /* Add keyboard handler */
-  add_irq_handler(1, keyboard_handler);
+  //add_irq_handler(1, keyboard_handler);
   serial_printf("===> Initialized IDT\r\n");
   /* Initialize page frame allocator */
   if (!page_frame_alloc_init(mb_info)) {
@@ -51,7 +57,27 @@ void kernel_main(unsigned int mb_info_addr) {
   serial_printf("===> Initialized page frame allocator\r\n");
 
   /* ----- TEST ----- */
-  serial_printf("Testnum: %is\r\n", -49);
+  serial_printf("framebuffer_addr: 0x%xd\r\n", mb_info->framebuffer_addr);
+  serial_printf("framebuffer_width: 0x%xd\r\n", mb_info->framebuffer_width);
+  serial_printf("framebuffer_height: 0x%xd\r\n", mb_info->framebuffer_height);
+  serial_printf("framebuffer_bpp: 0x%xd\r\n", mb_info->framebuffer_bpp);
+  _init_PD[0x301] = (U32_PTR(pt) - 0xc0000000) | 0x00000003;
+  _init_PD[0x302] = (U32_PTR(pt2) - 0xc0000000) | 0x00000003;
+  for (u32 i = 0; i < 1024; i++) {
+    pt[i] =
+      (mb_info->framebuffer_addr + i * 0x1000) | 0x00000003;
+  }
+  for (u32 i = 0; i < 1024; i++) {
+    pt2[i] =
+      (mb_info->framebuffer_addr + i * 0x1000 + 1024 * 0x1000) | 0x00000003;
+  }
+  for (
+      u32 i = 0;
+      i < mb_info->framebuffer_width * mb_info->framebuffer_height;
+      i++
+  ) {
+    ((u32*)0xc0400000)[i] = i;//0xffffffff;
+  }
 
   /* ----- HALT ----- */
   /* Loop infinitely */

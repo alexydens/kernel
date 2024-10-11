@@ -66,7 +66,6 @@ static inline void kprintf(void (*kputc)(char), const char *format, ...) {
               format++;
               u8_decstr(va_arg(args, unsigned), ntostr);
               for (int i = 0; i < 3; i++) {
-                if (ntostr[i] == '0') continue;
                 kputc(ntostr[i]);
               }
               break;
@@ -74,7 +73,6 @@ static inline void kprintf(void (*kputc)(char), const char *format, ...) {
               format++;
               u16_decstr(va_arg(args, unsigned), ntostr);
               for (int i = 0; i < 5; i++) {
-                if (ntostr[i] == '0') continue;
                 kputc(ntostr[i]);
               }
               break;
@@ -82,7 +80,6 @@ static inline void kprintf(void (*kputc)(char), const char *format, ...) {
               format++;
               u32_decstr(va_arg(args, u32), ntostr);
               for (int i = 0; i < 10; i++) {
-                if (ntostr[i] == '0') continue;
                 kputc(ntostr[i]);
               }
               break;
@@ -91,7 +88,6 @@ static inline void kprintf(void (*kputc)(char), const char *format, ...) {
               format++;
               u64_decstr(va_arg(args, u64), ntostr);
               for (int i = 0; i < 20; i++) {
-                if (ntostr[i] == '0') continue;
                 kputc(ntostr[i]);
               }
               break;
@@ -106,7 +102,6 @@ static inline void kprintf(void (*kputc)(char), const char *format, ...) {
               format++;
               i8_decstr(va_arg(args, int), ntostr);
               for (int i = 0; i < 4; i++) {
-                if (ntostr[i] == ' ' || ntostr[i] == '0') continue;
                 kputc(ntostr[i]);
               }
               break;
@@ -114,7 +109,6 @@ static inline void kprintf(void (*kputc)(char), const char *format, ...) {
               format++;
               i16_decstr(va_arg(args, int), ntostr);
               for (int i = 0; i < 6; i++) {
-                if (ntostr[i] == ' ' || ntostr[i] == '0') continue;
                 kputc(ntostr[i]);
               }
               break;
@@ -122,7 +116,6 @@ static inline void kprintf(void (*kputc)(char), const char *format, ...) {
               format++;
               i32_decstr(va_arg(args, i32), ntostr);
               for (int i = 0; i < 11; i++) {
-                if (ntostr[i] == ' ' || ntostr[i] == '0') continue;
                 kputc(ntostr[i]);
               }
               break;
@@ -131,7 +124,6 @@ static inline void kprintf(void (*kputc)(char), const char *format, ...) {
               format++;
               i64_decstr(va_arg(args, i64), ntostr);
               for (int i = 0; i < 21; i++) {
-                if (ntostr[i] == ' ' || ntostr[i] == '0') continue;
                 kputc(ntostr[i]);
               }
               break;

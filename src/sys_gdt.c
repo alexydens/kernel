@@ -67,7 +67,9 @@ static inline gdt_entry_t gdt_entry(
 
 /* Globals */
 static bool initialized = false;
+__attribute__((aligned(0x1000)))
 static gdtr_t gdt;
+__attribute__((aligned(0x1000)))
 static gdt_entry_t gdt_entries[5];
 
 /* Initialize GDT (return false on error) */
