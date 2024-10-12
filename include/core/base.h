@@ -54,7 +54,16 @@ _Static_assert(sizeof(bool) == 1, "Wrong size for bool!");
 #ifdef __GNUC__
 #  define __packed __attribute__((packed))
 #else
+#error "Can't use packed structs on this compiler!"
 #  define __packed
+#endif
+
+/* Ensure something is aligned (e.g. aligned to page boundary) */
+#ifdef __GNUC__
+#define __aligned(x) __attribute__((aligned(x)))
+#else
+#error "Can't change alignment on this compiler!"
+#define __aligned(x)
 #endif
 
 /* MACROS */
@@ -125,5 +134,31 @@ _Static_assert(sizeof(bool) == 1, "Wrong size for bool!");
 
 extern u32 _init_PD[1024];
 extern u32 _init_PT0[1024];
+
+/* UTILITY FUNCTIONS */
+
+/* Memset */
+static inline void *memset(void *dst, u8 val, u32 size) {
+  if (!dst) return NULL;
+  if (!size) return dst;
+  for (u32 i = 0; i < size; i++) ((u8 *)dst)[i] = val;
+  return dst;
+}
+
+/* Memcpy */
+static inline void *memcpy(void *dst, const void *src, u32 size) {
+  if (!dst || !src) return NULL;
+  if (!size) return dst;
+  for (u32 i = 0; i < size; i++) ((u8 *)dst)[i] = ((u8 *)src)[i];
+  return dst;
+}
+
+/* Strlen */
+static inline u32 strlen(const char *str) {
+  if (!str) return 0;
+  u32 len = 0;
+  while (str[len]) len++;
+  return len;
+}
 
 #endif /* CORE_BASE_H */
