@@ -1,14 +1,17 @@
 /* Includes */
 #include <core/base.h>
 #include <sys/gdt.h>
+#include <io/serial.h>
 
 /* Entry point for the kernel */
 void kernel_main(void) {
   /* Init */
   if (!gdt_init()) __asm__ __volatile__ ("int $0x3");
+  if (!serial_init(12)) __asm__ __volatile__ ("int $0x3");
 
   /* Test */
   *(unsigned short *)0xc03ff000 = 'A' | (1 << 8);
+  serial_puts("Hello, World!\n", SERIAL_PORT_COM1);
 
   /* Halt */
   while (1);
