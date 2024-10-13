@@ -17,12 +17,12 @@ STRIP=$(CROSS_DIR)/bin/i686-elf-strip
 OBJCOPY=$(CROSS_DIR)/bin/i686-elf-objcopy
 
 # C compiler flags
-CFLAGS = -std=c11 -Wall -Wextra -Wpedantic
+CFLAGS = -std=c11 -Wall -Wextra -Wpedantic -m32
 CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 CFLAGS += -ffreestanding
 CFLAGS += -I$(INC_DIR)
 # C++ compiler flags
-CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic
+CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic -m32
 CXXFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 CXXFLAGS += -ffreestanding
 CXXFLAGS += -fno-exceptions -fno-rtti

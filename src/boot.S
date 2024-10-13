@@ -44,6 +44,44 @@ _init_PD:
 _init_PT0:
 .skip 4096
 
+/* The GDT */
+.section .multiboot.data, "aw"
+.align 8
+_gdt:
+/* Null segment */
+.short 0, 0, 0, 0
+/* Kernel code segment */
+.short 0xffff /* limit 0 - 15 */
+.short 0x0000 /* base 0 - 15 */
+.byte 0x00 /* base 16 - 23 */
+.byte 0x9b /* present, ring 0, not system, code, readable, accessed */
+.byte 0xcf /* page granularity, 32-bit, limit 16 - 19 */
+.byte 0x00 /* base 24 - 31 */
+/* Kernel data segment */
+.short 0xffff /* limit 0 - 15 */
+.short 0x0000 /* base 0 - 15 */
+.byte 0x00 /* base 16 - 23 */
+.byte 0x93 /* present, ring 0, not system, writable, accessed */
+.byte 0xcf /* page granularity, 32-bit, limit 16 - 19 */
+.byte 0x00 /* base 24 - 31 */
+/* User code segment */
+.short 0xffff /* limit 0 - 15 */
+.short 0x0000 /* base 0 - 15 */
+.byte 0x00 /* base 16 - 23 */
+.byte 0xfb /* present, ring 3, not system, code, readable, accessed */
+.byte 0xcf /* page granularity, 32-bit, limit 16 - 19 */
+.byte 0x00 /* base 24 - 31 */
+/* User data segment */
+.short 0xffff /* limit 0 - 15 */
+.short 0x0000 /* base 0 - 15 */
+.byte 0x00 /* base 16 - 23 */
+.byte 0xf3 /* present, ring 3, not system, writable, accessed */
+.byte 0xcf /* page granularity, 32-bit, limit 16 - 19 */
+.byte 0x00 /* base 24 - 31 */
+_gdtr:
+.short _gdtr - _gdt
+.long _gdt
+
 /*
 The entry point is _start. This is linked in from the bootloader
 */
@@ -51,6 +89,21 @@ The entry point is _start. This is linked in from the bootloader
 .global _start
 .type _start, @function
 _start:
+  /* Load the GDT */
+  lgdt _gdtr
+  
+  /* Set segment registers */
+  movw $0x10, %ax
+  movw %ax, %ds
+  movw %ax, %es
+  movw %ax, %fs
+  movw %ax, %gs
+  movw %ax, %ss
+
+  /* Long jump */
+  ljmp $0x08, $1f
+1:
+
   /* Keep track of the physical address of the first page table */
   movl $(_init_PT0 - 0xc0000000), %edi
   /* ESI will store the physical address of the page being allocated */
