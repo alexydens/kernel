@@ -1,19 +1,46 @@
 /* Includes */
 #include <core/base.h>
-#include <sys/gdt.h>
+#include <core/puttypes.h>
 #include <io/serial.h>
+#include <sys/gdt.h>
+#include <sys/idt.h>
+#include <ext/multiboot.h>
+
+/* A putc as required */
+static inline void putc(u8 c) { serial_putc(c, SERIAL_PORT_COM1); }
 
 /* Entry point for the kernel */
-void kernel_main(void) {
+void kernel_main(u32 mb_info_ptr) {
+  /* Multiboot info */
+  multiboot_info_t *mb_info = (multiboot_info_t *)(mb_info_ptr+0xc0000000);
+
   /* Init */
-  if (!gdt_init()) __asm__ __volatile__ ("int $0x3");
   if (!serial_init(12)) __asm__ __volatile__ ("int $0x3");
+  if (!gdt_init()) __asm__ __volatile__ ("int $0x3");
+  if (!idt_init()) __asm__ __volatile__ ("int $0x3");
 
   /* Test */
-  *(unsigned short *)0xc03ff000 = 'A' | (1 << 8);
-  serial_puts("Hello, World!\n", SERIAL_PORT_COM1);
+  __asm__ __volatile__ ("int $0x3");
+
+  /* Print some info about the framebuffer */
+  //serial_puts("framebuffer_addr: 0x", SERIAL_PORT_COM1);
+  //put32hex(mb_info->framebuffer_addr, putc);
+  //serial_puts("\r\n", SERIAL_PORT_COM1);
+  //serial_puts("framebuffer_width: 0x", SERIAL_PORT_COM1);
+  //put32hex(mb_info->framebuffer_width, putc);
+  //serial_puts("\r\n", SERIAL_PORT_COM1);
+  //serial_puts("framebuffer_height: 0x", SERIAL_PORT_COM1);
+  //put32hex(mb_info->framebuffer_height, putc);
+  //serial_puts("\r\n", SERIAL_PORT_COM1);
+  //serial_puts("framebuffer_bpp: 0x", SERIAL_PORT_COM1);
+  //put32hex(mb_info->framebuffer_bpp, putc);
+  //serial_puts("\r\n", SERIAL_PORT_COM1);
 
   /* Halt */
   while (1);
-  __asm__ __volatile__ ("cli;hlt");
+  __asm__ __volatile__ (
+      "cli\n\t"
+      "1:\n\t"
+      "hlt\n\t"
+      "jmp 1b");
 }
