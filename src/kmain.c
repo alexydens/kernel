@@ -1,6 +1,7 @@
 /* Includes */
 #include <core/base.h>
 #include <core/puttypes.h>
+#include <core/printf.h>
 #include <io/serial.h>
 #include <sys/gdt.h>
 #include <sys/idt.h>
@@ -21,20 +22,23 @@ void kernel_main(u32 mb_info_ptr) {
 
   /* Test */
   __asm__ __volatile__ ("int $0x3");
+  _printf(putc, "Hex is: %08x\r\n", 0xea);
+  _printf(putc, "Capital hex is: %08X\r\n", 0xdeadbeef);
+  _printf(putc, "Int is: %+05d\r\n", 15);
 
   /* Print some info about the framebuffer */
-  serial_puts("framebuffer_addr: 0x", SERIAL_PORT_COM1);
-  put32hex(mb_info->framebuffer_addr, putc);
-  serial_puts("\r\n", SERIAL_PORT_COM1);
-  serial_puts("framebuffer_width: 0x", SERIAL_PORT_COM1);
-  put32hex(mb_info->framebuffer_width, putc);
-  serial_puts("\r\n", SERIAL_PORT_COM1);
-  serial_puts("framebuffer_height: 0x", SERIAL_PORT_COM1);
-  put32hex(mb_info->framebuffer_height, putc);
-  serial_puts("\r\n", SERIAL_PORT_COM1);
-  serial_puts("framebuffer_bpp: 0x", SERIAL_PORT_COM1);
-  put32hex(mb_info->framebuffer_bpp, putc);
-  serial_puts("\r\n", SERIAL_PORT_COM1);
+  //serial_puts("framebuffer_addr: 0x", SERIAL_PORT_COM1);
+  //put32hex(mb_info->framebuffer_addr, putc);
+  //serial_puts("\r\n", SERIAL_PORT_COM1);
+  //serial_puts("framebuffer_width: 0x", SERIAL_PORT_COM1);
+  //put32hex(mb_info->framebuffer_width, putc);
+  //serial_puts("\r\n", SERIAL_PORT_COM1);
+  //serial_puts("framebuffer_height: 0x", SERIAL_PORT_COM1);
+  //put32hex(mb_info->framebuffer_height, putc);
+  //serial_puts("\r\n", SERIAL_PORT_COM1);
+  //serial_puts("framebuffer_bpp: 0x", SERIAL_PORT_COM1);
+  //put32hex(mb_info->framebuffer_bpp, putc);
+  //serial_puts("\r\n", SERIAL_PORT_COM1);
 
   /* Halt */
   while (1);
