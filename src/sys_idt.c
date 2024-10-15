@@ -194,5 +194,9 @@ bool idt_init(void) {
   __asm__ __volatile__ ("ljmp $0x08, $1f");
   __asm__ __volatile__ ("1:");
 
+  /* Disable PIC */
+  port_outb(0x21, 0xff);
+  port_outb(0xa1, 0xff);
+
   return true;
 }

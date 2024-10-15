@@ -23,18 +23,18 @@ void kernel_main(u32 mb_info_ptr) {
   __asm__ __volatile__ ("int $0x3");
 
   /* Print some info about the framebuffer */
-  //serial_puts("framebuffer_addr: 0x", SERIAL_PORT_COM1);
-  //put32hex(mb_info->framebuffer_addr, putc);
-  //serial_puts("\r\n", SERIAL_PORT_COM1);
-  //serial_puts("framebuffer_width: 0x", SERIAL_PORT_COM1);
-  //put32hex(mb_info->framebuffer_width, putc);
-  //serial_puts("\r\n", SERIAL_PORT_COM1);
-  //serial_puts("framebuffer_height: 0x", SERIAL_PORT_COM1);
-  //put32hex(mb_info->framebuffer_height, putc);
-  //serial_puts("\r\n", SERIAL_PORT_COM1);
-  //serial_puts("framebuffer_bpp: 0x", SERIAL_PORT_COM1);
-  //put32hex(mb_info->framebuffer_bpp, putc);
-  //serial_puts("\r\n", SERIAL_PORT_COM1);
+  serial_puts("framebuffer_addr: 0x", SERIAL_PORT_COM1);
+  put32hex(mb_info->framebuffer_addr, putc);
+  serial_puts("\r\n", SERIAL_PORT_COM1);
+  serial_puts("framebuffer_width: 0x", SERIAL_PORT_COM1);
+  put32hex(mb_info->framebuffer_width, putc);
+  serial_puts("\r\n", SERIAL_PORT_COM1);
+  serial_puts("framebuffer_height: 0x", SERIAL_PORT_COM1);
+  put32hex(mb_info->framebuffer_height, putc);
+  serial_puts("\r\n", SERIAL_PORT_COM1);
+  serial_puts("framebuffer_bpp: 0x", SERIAL_PORT_COM1);
+  put32hex(mb_info->framebuffer_bpp, putc);
+  serial_puts("\r\n", SERIAL_PORT_COM1);
 
   /* Halt */
   while (1);
