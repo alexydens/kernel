@@ -135,9 +135,33 @@ extern void _isr_31(void);
 
 /* The common exception handler */
 void isr_handler_common(struct isr_args *args) {
-  serial_puts("Exception: ", SERIAL_PORT_COM1);
-  serial_puts(exception_names[args->interrupt_number], SERIAL_PORT_COM1);
-  serial_puts("\r\n", SERIAL_PORT_COM1);
+  /* Print exception type */
+  serial_printf(
+      "Exception: %s\r\n",
+      exception_names[args->interrupt_number]
+  );
+  /* Check for certain exceptions, handle them */
+  switch (args->interrupt_number) {
+    case 14: /* Page fault */
+      {
+        u32 addr;
+        __asm__ __volatile__ ("mov %%cr2,%0" : "=r" (addr));
+        serial_printf(
+            "Address was: 0x%08x\r\n"
+            "%s process tried to %s a %s page.\r\n",
+            addr,
+            args->error_code & 0x4 ? "User" : "Supervisor",
+            args->error_code & 0x2 ? "read" : "write",
+            args->error_code & 0x1 ? "present" : "non-present"
+        );
+      }
+      break;
+    default:
+      break;
+  }
+  /* Halt */
+  serial_printf("Halting...\r\n");
+  __asm__ __volatile__ ("cli;hlt");
 }
 
 /* Initialize the IDT */

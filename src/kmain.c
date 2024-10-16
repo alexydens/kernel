@@ -17,8 +17,9 @@ void kernel_main(u32 mb_info_ptr) {
   if (!gdt_init()) __asm__ __volatile__ ("int $0x3");
   if (!idt_init()) __asm__ __volatile__ ("int $0x3");
 
-  /* Test */
-  __asm__ __volatile__ ("int $0x3");
+  /* Test exceptions */
+  //__asm__ __volatile__ ("int $0x3");
+  //*(u32 *)0xdeadbeef = 0xdeadbeef;
 
   /* Print some info about the framebuffer */
   serial_printf("framebuffer_addr: 0x%08x\r\n", mb_info->framebuffer_addr);
