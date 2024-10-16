@@ -25,7 +25,7 @@ const char HEXDIGITS[] = "0123456789abcdef";
 const char HEXDIGITS_CAPITAL[] = "0123456789ABCDEF";
 
 /* Print formatted output using provided putc */
-void _printf(void (*_putc)(u8), const char *format, ...) {
+void _printf(void (*_putc)(char), const char *format, ...) {
   va_list args;
   const char *ptr = format;
   va_start(args, format);

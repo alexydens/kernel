@@ -6,6 +6,6 @@
 #include <core/base.h>
 
 /* Print formatted output using provided putc */
-extern void _printf(void (*putc)(u8), const char *format, ...);
+extern void _printf(void (*putc)(char), const char *format, ...);
 
 #endif /* CORE_PRINTF_H */
