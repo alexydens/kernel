@@ -72,18 +72,6 @@ void _printf(void (*_putc)(char), const char *format, ...) {
             break;
         }
       }
-      //switch (*ptr) {
-        //case '0':
-          //state.flags |= FORMAT_FLAGS_ZEROPAD;
-          //ptr++;
-          //break;
-        //case '+':
-          //state.flags |= FORMAT_FLAGS_FORCESIGN;
-          //ptr++;
-          //break;
-        //default:
-          //break;
-      //}
       /* Width */
       state.width = 0;
       if (*ptr >= '0' && *ptr <= '9') {
@@ -164,7 +152,8 @@ void _printf(void (*_putc)(char), const char *format, ...) {
             _putc('0' + signed_temp % 10);
             i++;
           }
-          for (padding = i; padding < state.width; padding++) _putc(' ');
+          if (!(state.flags & FORMAT_FLAGS_ZEROPAD))
+            for (padding = i; padding < state.width; padding++) _putc(' ');
           break;
         case 'u':
           ptr++;
@@ -189,7 +178,8 @@ void _printf(void (*_putc)(char), const char *format, ...) {
             _putc('0' + unsigned_temp % 10);
             i++;
           }
-          for (padding = i; padding < state.width; padding++) _putc(' ');
+          if (!(state.flags & FORMAT_FLAGS_ZEROPAD))
+            for (padding = i; padding < state.width; padding++) _putc(' ');
           break;
         case 'x':
           ptr++;
@@ -214,7 +204,8 @@ void _printf(void (*_putc)(char), const char *format, ...) {
             _putc(HEXDIGITS[unsigned_temp & 0xf]);
             i++;
           }
-          for (padding = i; padding < state.width; padding++) _putc(' ');
+          if (!(state.flags & FORMAT_FLAGS_ZEROPAD))
+            for (padding = i; padding < state.width; padding++) _putc(' ');
           break;
         case 'X':
           ptr++;
