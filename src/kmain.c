@@ -28,9 +28,9 @@ void kernel_main(u32 mb_info_ptr) {
   //*(u32 *)0xdeadbeef = 0xdeadbeef;
   
   /* Test PFA */
-  u32 addr = pfa_get_frame();
-  serial_printf("Addr: 0x%08x\r\n", addr);
-  pfa_free_frame(addr);
+  //u32 addr = pfa_get_frame();
+  //serial_printf("Addr: 0x%08x\r\n", addr);
+  //pfa_free_frame(addr);
 
   /* Halt */
   while (1);
