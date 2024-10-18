@@ -27,7 +27,7 @@ u32 vmm_create_page_directory(void) {
   /* Set each entry to non-present, read/write */
   for (u32 i = 0; i < 1024; i++) edit_pd[i] = 0x2;
   /* Copy over the kernel page table */
-  edit_pd[0x300] = (u32)((void*)_init_PT0) | 0x3;
+  edit_pd[0x300] = ((u32)_init_PT0-0xc0000000) | 0x3;
 
   /* Unload it, editing done */
   _init_PT0[1022] = 0x2;
@@ -39,7 +39,11 @@ void vmm_switch_page_directory(u32 pd) {
   /* Set current page directory */
   current_pd = pd;
   /* Move into cr3 */
-  __asm__ __volatile__ ("mov %0, %%cr3" :: "r"(pd));
+  __asm__ __volatile__ ("mov %0, %%eax" :: "r"(pd));
+  __asm__ __volatile__ ("mov %eax, %cr3");
+  __asm__ __volatile__ ("lea 1f, %eax");
+  __asm__ __volatile__ ("jmp *%eax");
+  __asm__ __volatile__ ("1:");
 }
 /* Delete a page directory */
 void vmm_delete_page_directory(u32 pd) {
@@ -78,7 +82,11 @@ void vmm_map_page(u32 virtual_addr, u8 type) {
   /* Load in the page directory */
   _init_PT0[1022] = current_pd | 0x3;
   /* Load in the page table */
-  _init_PT0[1023] = edit_pd[virtual_addr >> 22] | 0x3;
+  if (!(edit_pd[virtual_addr >> 22] & 0x1)) {
+    edit_pd[virtual_addr >> 22] = pfa_get_frame() | 0x3;
+    _init_PT0[1023] = edit_pd[virtual_addr >> 22] | 0x3;
+    for (u32 i = 0; i < 1024; i++) edit_pt[i] = 0x2;
+  } else _init_PT0[1023] = edit_pd[virtual_addr >> 22] | 0x3;
 
   /* Set the entry */
   u32 page = pfa_get_frame();

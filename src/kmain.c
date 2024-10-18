@@ -6,6 +6,7 @@
 #include <sys/gdt.h>
 #include <sys/idt.h>
 #include <mem/pfa.h>
+#include <mem/vmm.h>
 #include <ext/multiboot.h>
 
 /* Entry point for the kernel */
@@ -22,15 +23,22 @@ void kernel_main(u32 mb_info_ptr) {
   serial_printf("===> Initialized Interrupt Descriptor Table\r\n");
   if (!pfa_init(mb_info)) goto init_err;
   serial_printf("===> Initialized Page Frame Allocator\r\n");
+  if (!vmm_init()) goto init_err;
+  serial_printf("===> Initialized Virtual Memory Manager\r\n");
 
-  /* Test exceptions */
+  /* Test */
   //__asm__ __volatile__ ("int $0x3");
   //*(u32 *)0xdeadbeef = 0xdeadbeef;
-  
-  /* Test PFA */
   //u32 addr = pfa_get_frame();
   //serial_printf("Addr: 0x%08x\r\n", addr);
   //pfa_free_frame(addr);
+  u32 test_pd = vmm_create_page_directory();
+  vmm_switch_page_directory(test_pd);
+  vmm_map_page(0xdeadbeef, VMM_PAGE_TYPE_KERNEL);
+  *(u32 *)0xdeadbeef = 0xdeadbeef;
+  vmm_unmap_page(0xdeadbeef);
+  vmm_switch_page_directory((u32)_init_PD-0xc0000000);
+  vmm_delete_page_directory(test_pd);
 
   /* Halt */
   while (1);
