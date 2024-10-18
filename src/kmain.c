@@ -5,6 +5,7 @@
 #include <io/serial.h>
 #include <sys/gdt.h>
 #include <sys/idt.h>
+#include <mem/pfa.h>
 #include <ext/multiboot.h>
 
 /* Entry point for the kernel */
@@ -19,10 +20,17 @@ void kernel_main(u32 mb_info_ptr) {
   serial_printf("===> Initialized Global Descriptor Table\r\n");
   if (!idt_init()) goto init_err;
   serial_printf("===> Initialized Interrupt Descriptor Table\r\n");
+  if (!pfa_init(mb_info)) goto init_err;
+  serial_printf("===> Initialized Page Frame Allocator\r\n");
 
   /* Test exceptions */
   //__asm__ __volatile__ ("int $0x3");
   //*(u32 *)0xdeadbeef = 0xdeadbeef;
+  
+  /* Test PFA */
+  u32 addr = pfa_get_frame();
+  serial_printf("Addr: 0x%08x\r\n", addr);
+  pfa_free_frame(addr);
 
   /* Halt */
   while (1);

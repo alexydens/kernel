@@ -18,6 +18,6 @@
 #define GDT_SEGMENT_USERDATA    ((u16)(0x0020|0x0003))
 
 /* Initialize the GDT */
-bool gdt_init(void);
+extern bool gdt_init(void);
 
 #endif /* SYS_GDT_H */

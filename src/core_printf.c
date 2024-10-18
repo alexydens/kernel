@@ -140,6 +140,7 @@ void _printf(void (*_putc)(char), const char *format, ...) {
             signed_temp /= 10;
             digits++;
           }
+          if (!arg.sint) digits=1;
           if (state.flags & FORMAT_FLAGS_ZEROPAD) {
             if (digits < state.width) {
               padding = state.width - digits - i;
@@ -166,6 +167,7 @@ void _printf(void (*_putc)(char), const char *format, ...) {
             unsigned_temp /= 10;
             digits++;
           }
+          if (!arg.sint) digits=1;
           if (state.flags & FORMAT_FLAGS_ZEROPAD) {
             if (digits < state.width) {
               padding = state.width - digits - i;
@@ -192,6 +194,7 @@ void _printf(void (*_putc)(char), const char *format, ...) {
             unsigned_temp /= 16;
             digits++;
           }
+          if (!arg.sint) digits=1;
           if (state.flags & FORMAT_FLAGS_ZEROPAD) {
             if (digits < state.width) {
               padding = state.width - digits - i;
@@ -218,6 +221,7 @@ void _printf(void (*_putc)(char), const char *format, ...) {
             unsigned_temp /= 16;
             digits++;
           }
+          if (!arg.sint) digits=1;
           if (state.flags & FORMAT_FLAGS_ZEROPAD) {
             if (digits < state.width) {
               padding = state.width - digits - i;
@@ -230,7 +234,8 @@ void _printf(void (*_putc)(char), const char *format, ...) {
             _putc(HEXDIGITS_CAPITAL[unsigned_temp & 0x0000000f]);
             i++;
           }
-          for (padding = i; padding < state.width; padding++) _putc(' ');
+          if (!(state.flags & FORMAT_FLAGS_ZEROPAD))
+            for (padding = i; padding < state.width; padding++) _putc(' ');
           break;
         case 'f':
           ptr++;

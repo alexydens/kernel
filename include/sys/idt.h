@@ -17,6 +17,6 @@ struct isr_args {
 };
 
 /* Initialize the IDT */
-bool idt_init(void);
+extern bool idt_init(void);
 
 #endif /* SYS_IDT_H */
