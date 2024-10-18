@@ -43,8 +43,34 @@ void vmm_switch_page_directory(u32 pd) {
 }
 /* Delete a page directory */
 void vmm_delete_page_directory(u32 pd) {
-  /* TODO: Implement */
-  (void)pd;
+  /* Load in the page directory */
+  _init_PT0[1022] = pd | 0x3;
+
+  /* Loop over page tables */
+  for (u32 i = 0; i < 0x300; i++) {
+    /* Skip non-present entries */
+    if (!(edit_pd[i] & 0x1)) continue;
+    /* Load in the page table */
+    _init_PT0[1023] = edit_pd[i] | 0x3;
+
+    /* Loop over entries */
+    for (u32 j = 0; j < 1024; j++) {
+      /* Skip non-present entries */
+      if (!(edit_pt[j] & 0x1)) continue;
+      /* Free the page */
+      pfa_free_frame(edit_pt[j] & ~(0xfff));
+    }
+
+    /* Unload the page table */
+    _init_PT0[1023] = 0x2;
+    /* Free the page table page frame */
+    pfa_free_frame(edit_pd[i] & ~(0xfff));
+  }
+
+  /* Unload the page directory */
+  _init_PT0[1022] = 0x2;
+  /* Free the page directory page frame */
+  pfa_free_frame(pd);
 }
 
 /* Map a page of virtual memory */
