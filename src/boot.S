@@ -56,8 +56,8 @@ _start:
   /* ESI will store the physical address of the page being allocated */
   movl $0x0, %esi
   /* The ECX stores loop count. In this case, we loop one time for each PF */
-  /* (1022 times - in hex for consistency) */
-  movl $0x3ff, %ecx
+  /* (1024 times - in hex for consistency) */
+  movl $0x400, %ecx
 
 1:
   /* If the pointer is less than the start of kernel, go to 1: */
@@ -83,9 +83,6 @@ _start:
 
 3:
   /* We are after the kernel. It's go time! */
-  /* Add the VGA memory to the last page in the first table */
-  movl $(0x000b8000 | 0x3), _init_PT0 - 0xc0000000 + 0x3ff * 0x4
-
   /* 
   We are going to need the a page directory entry to boot into, but then
   we want a different one pointing to the higher half. We create 2 now, and 
