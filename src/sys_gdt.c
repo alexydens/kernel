@@ -3,7 +3,7 @@
 
 /* Consts */
 /* Number of GDT entries */
-#define GDT_ENTRIES            5
+#define GDT_ENTRIES            6
 /* Access byte */
 #define GDT_ACCESS_PRESENT     (1 << 7) /* Is this segment present? */
 #define GDT_ACCESS_RING0       (0 << 5) /* DPL = 0 */
@@ -51,9 +51,44 @@ struct __packed gdtr {
   u32 base;
 };
 
+/* The TSS structure */
+struct __packed tss {
+  u32 prev_tss;
+  u32 esp0;
+  u32 ss0;
+  u32 esp1;
+  u32 ss1;
+  u32 esp2;
+  u32 ss2;
+  u32 cr3;
+  u32 eip;
+  u32 eflags;
+  u32 eax;
+  u32 ecx;
+  u32 edx;
+  u32 ebx;
+  u32 esp;
+  u32 ebp;
+  u32 esi;
+  u32 edi;
+  u32 es;
+  u32 cs;
+  u32 ss;
+  u32 ds;
+  u32 fs;
+  u32 gs;
+  u32 ldt;
+  u16 trap;
+  u16 iomap_base;
+};
+
 /* Globals */
 static struct gdtr gdtr __aligned(0x10);
 static struct gdt_entry gdt[256] __aligned(0x10);
+static struct tss tss __aligned(0x10);
+
+/* From linker... */
+extern u32 _stack_top;
 
 /* Utility functions */
 static inline void set_entry(
@@ -138,6 +173,23 @@ bool gdt_init(void) {
       | GDT_FLAGS_32BIT
   );
 
+  /* Initialize the TSS */
+  memset(&tss, 0, sizeof(struct tss));
+  tss.ss0 = GDT_SEGMENT_KERNELDATA;
+  tss.esp0 = (u32)&_stack_top;
+  /* Set the TSS entry */
+  set_entry(
+      5,
+      (u32)&tss - 0xc0000000,
+      sizeof(struct tss),
+      GDT_ACCESS_PRESENT
+      | GDT_ACCESS_RING0
+      | GDT_ACCESS_SYSSEG
+      | GDT_SYSSEG_TSS32A
+      | GDT_ACCESS_ACCESSED,
+      0
+  );
+
   /* Set the GDT limit */
   gdtr.limit = 8*GDT_ENTRIES - 1;
   /* Set the GDT base */
@@ -145,6 +197,9 @@ bool gdt_init(void) {
 
   /* Load the GDT */
   __asm__ __volatile__ ("lgdt %0" : : "m" (gdtr));
+
+  /* Flush the TSS */
+  __asm__ __volatile__ ("ltr %0" : : "r" (GDT_SEGMENT_TSS));
 
   /* Reload the segment registers */
   __asm__ __volatile__ ("mov %0, %%ax" : : "r" (GDT_SEGMENT_KERNELDATA));

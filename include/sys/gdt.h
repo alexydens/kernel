@@ -16,6 +16,8 @@
 #define GDT_SEGMENT_USERCODE    ((u16)(0x0018|0x0003))
 /* The user data segment descriptor */
 #define GDT_SEGMENT_USERDATA    ((u16)(0x0020|0x0003))
+/* The TSS segment descriptor */
+#define GDT_SEGMENT_TSS         ((u16)0x0028)
 
 /* Initialize the GDT */
 extern bool gdt_init(void);

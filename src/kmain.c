@@ -9,6 +9,8 @@
 #include <mem/vmm.h>
 #include <ext/multiboot.h>
 
+extern void ring3_test(void);
+
 /* Entry point for the kernel */
 void kernel_main(u32 mb_info_ptr) {
   /* Multiboot info */
@@ -26,20 +28,24 @@ void kernel_main(u32 mb_info_ptr) {
   if (!vmm_init()) goto init_err;
   serial_printf("===> Initialized Virtual Memory Manager\r\n");
 
+  ring3_test();
+
   /* Test */
   //__asm__ __volatile__ ("int $0x3");
   //*(u32 *)0xdeadbeef = 0xdeadbeef;
   //u32 addr = pfa_get_frame();
   //serial_printf("Addr: 0x%08x\r\n", addr);
   //pfa_free_frame(addr);
-  u32 test_pd = vmm_create_page_directory();
-  vmm_switch_page_directory(test_pd);
-  vmm_map_page(0xdeadbeef, VMM_PAGE_TYPE_KERNEL);
-  *(u32 *)0xdeadbeef = 0xdeadbeef;
-  vmm_unmap_page(0xdeadbeef);
-  vmm_switch_page_directory((u32)_init_PD-0xc0000000);
-  vmm_delete_page_directory(test_pd);
-
+  //u32 test_pd = vmm_create_page_directory();
+  //vmm_switch_page_directory(test_pd);
+  //vmm_map_page(0xdeadbeef, VMM_PAGE_TYPE_KERNEL);
+  //*(u32 *)0xdeadbeef = 0xdeadbeef;
+  //vmm_unmap_page(0xdeadbeef);
+  //vmm_switch_page_directory((u32)_init_PD-0xc0000000);
+  //vmm_delete_page_directory(test_pd);
+  
+  __asm__ __volatile__ ("xchg %bx,%bx");
+  
   /* Halt */
   while (1);
   __asm__ __volatile__ (

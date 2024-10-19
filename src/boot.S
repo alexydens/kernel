@@ -28,7 +28,7 @@ Reserve stack space.
 The stack is 16-byte aligned.
 */
 .section .init_stack, "aw", @nobits
-.globl stack_top
+.globl _stack_top
 .align 16
 _stack_bottom:
 .skip 16384
